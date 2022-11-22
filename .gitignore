@@ -1,0 +1,8 @@
+# Ignore all vscode files
+.vscode
+
+# Ignore all .exe files
+*.exe
+
+# Ignore all .pdf files
+*.pdf
