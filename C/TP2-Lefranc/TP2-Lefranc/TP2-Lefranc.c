@@ -66,6 +66,33 @@ void suite()
     }
 }
 
+//fonction qui calcule le nombre de Fibonacci d'un nombre N
+void fibonacci()
+{
+    int n, i;
+    long int f0=0, f1=1, fn;
+    printf("Calcul du nombre de Fibonacci d'un nombre N \n");
+    printf("Entrez N :");
+    scanf("%d", &n);
+    if (n == 0)
+    {
+        printf("Le nombre de Fibonacci de %d est : %d", n, f0);
+    }
+    else if (n == 1)
+    {
+        printf("Le nombre de Fibonacci de %d est %d", n, f1);
+    }
+    else
+    {
+        for (i = 0; i <= n-2; i++)
+        {
+            fn = f0 + f1;
+            f0 = f1;
+            f1 = fn;
+        }
+        printf("Le nombre de Fibonacci de %d est %d", n, fn);
+    }
+}
 
 int main()
 {
@@ -75,7 +102,7 @@ int main()
 		printf("\n \n Choississez votre Fonction a utiliser \n");
 		printf("1. equation \n");
 		printf("2. Suite \n");
-		printf("3.  \n");
+		printf("3. Fibonacci \n");
 		printf("4.  \n");
 		printf("5.  \n");
 		printf("6.  \n");
@@ -92,7 +119,7 @@ int main()
 			suite();
 			break;
 		case 3:
-			
+			fibonacci();
 			break;
 		case 4:
 			
