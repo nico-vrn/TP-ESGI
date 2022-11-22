@@ -41,8 +41,9 @@ void suite()
     printf("Calcul de la suite definie par u0=2 un+1=1/2(un+2/un) \n");
     printf("Entrez N :");
     scanf("%d", &n);
+    printf("U[0] = %.2f \n", u0);
     un = u0;
-    for (i = 0; i <= n-1; i++)
+    for (i = 1; i <= n-1; i++)
     {
         un1 = 0.5*(un+2/un);
         un = un1;
@@ -67,20 +68,17 @@ void suite()
 }
 
 //fonction qui calcule le nombre de Fibonacci d'un nombre N
-void fibonacci()
+int fibonacci(int n)
 {
-    int n, i;
+    int i;
     long int f0=0, f1=1, fn;
-    printf("Calcul du nombre de Fibonacci d'un nombre N \n");
-    printf("Entrez N :");
-    scanf("%d", &n);
     if (n == 0)
     {
-        printf("Le nombre de Fibonacci de %d est : %d", n, f0);
+        fn=f0;
     }
     else if (n == 1)
     {
-        printf("Le nombre de Fibonacci de %d est %d", n, f1);
+        fn=f1;
     }
     else
     {
@@ -90,23 +88,43 @@ void fibonacci()
             f0 = f1;
             f1 = fn;
         }
-        printf("Le nombre de Fibonacci de %d est %d", n, fn);
     }
+    return fn;
+}
+
+//fonction qui demande un nombre N puis affiche fibonacci(n+1)/fibonacci(N) affiche toutes les cinq jusqu'a N puis le résultat de O[N]
+void nb_or()
+{
+    int n, i;
+    float fn, fn1, fn2, on;
+    printf("Calcul de la suite definie par O[n]=F[n+1]/F[n] \n");
+    printf("Entrez N :");
+    scanf("%d", &n);
+    for (i = 1; i <= n; i++)
+    {
+        fn = fibonacci(i);
+        fn1 = fibonacci(i+1);
+        on = fn1/fn;
+        if (i%5 == 0)
+        {
+            printf("O[%d] = %.2f \n", i, on);
+        }
+    }
+    printf("Le resultat de O[%d] = %.2f \n", n, on);
+    printf("Le nombre d'or est egal a %f", on);
 }
 
 int main()
 {
-	int choix;
+	int choix, n;
 	do
 	{
 		printf("\n \n Choississez votre Fonction a utiliser \n");
 		printf("1. equation \n");
 		printf("2. Suite \n");
 		printf("3. Fibonacci \n");
-		printf("4.  \n");
-		printf("5.  \n");
-		printf("6.  \n");
-		printf("7.  \n");
+		printf("4. nombre d'or et fibonacci \n");
+		printf("5. Jeu de des \n");
 		printf("8. Quitter \n");
 		printf("Entrer votre choix : ");
 		scanf("%d", &choix);
@@ -119,19 +137,16 @@ int main()
 			suite();
 			break;
 		case 3:
-			fibonacci();
+            printf("Calcul du nombre de Fibonacci d'un nombre N \n");
+            printf("Entrez la valeur de n : ");
+            scanf("%d", &n);
+            printf("Le nombre de Fibonacci de %d est %d", n, fibonacci(n));
 			break;
 		case 4:
-			
+			nb_or();
 			break;
 		case 5:
-			
-			break;
-		case 6:
 
-			break;
-		case 7:
-			
 			break;
 		case 8:
 			printf("Au revoir \n");
