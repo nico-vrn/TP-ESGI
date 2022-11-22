@@ -37,22 +37,21 @@ void equation()
 void suite()
 {
     int n, i;
-    float u0, un, un1;
+    float u0=2, un, un1;
     printf("Calcul de la suite definie par u0=2 un+1=1/2(un+2/un) \n");
     printf("Entrez N :");
     scanf("%d", &n);
-    u0 = 2;
     un = u0;
-    for (i = 0; i < n; i++)
+    for (i = 0; i <= n-1; i++)
     {
-        un1 = (un+2)/un;
+        un1 = 0.5*(un+2/un);
         un = un1;
         if (i%10 == 0)
         {
-            printf("u[%d] = %f \n", i, un);
+            printf("u[%d] = %.2f \n", i, un);
         }
     }
-    printf("u[%d] = %f \n", n, un);
+    printf("Le resultat de U[%d] = %.2f \n", n, un);
     if (un > 0)
     {
         printf("La suite tend vers l'infini");
