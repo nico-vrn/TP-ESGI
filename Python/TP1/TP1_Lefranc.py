@@ -118,42 +118,43 @@ def RES(X,N):
 
 #menu
 def menu() :
-    print("1. Convertisseur ASCII")
-    print("2. Calcul de surface")
-    print("3. Somme et factoriel")
-    print("4. Arbre de noël")
-    print("5. Fonctions mathématiques")
-    print("6. Fonctions")
-    print("7. Quitter")
-    choix = int(input("Entrez votre choix : "))
-    if choix == 1:
-        ASCII()
-    elif choix == 2:
-        calcul_surface()
-    elif choix == 3:
-        somme_factoriel()
-    elif choix == 4:
-        nombre = int(input("Entrez le nombre de lignes : "))
-        caractere = input("Entrez le caractère : ")
-        arbre_noel(nombre,caractere)
-    elif choix == 5:
-        math()
-    elif choix == 6:
-        while True :
-            #demadner input d'un nombre négatif de l'UserWarning(
-            X = int(input("Entrez X un nombre négatif : "))
-            N = int(input("Entrez N, un nombre positif : "))
-            if X > 0 :
-                print("X doit être inférieur à 0")
-            elif N < 0 :
-                print("N doit être supérieur à 0")
-            else :
-                break
-        print("RES=",RES(X,N))
-        fonctions(X,N)
-    elif choix == 7:
-        print("Au revoir")
-    else:
-        print("Erreur, veuillez recommencer")
+    while True:
+        print("\n1. Convertisseur ASCII")
+        print("2. Calcul de surface")
+        print("3. Somme et factoriel")
+        print("4. Arbre de noël")
+        print("5. Fonctions mathématiques")
+        print("6. Fonctions")
+        print("7. Quitter")
+        choix = int(input("Entrez votre choix : "))
+        if choix == 1:
+            ASCII()
+        elif choix == 2:
+            calcul_surface()
+        elif choix == 3:
+            somme_factoriel()
+        elif choix == 4:
+            nombre = int(input("Entrez le nombre de lignes : "))
+            caractere = input("Entrez le caractère : ")
+            arbre_noel(nombre,caractere)
+        elif choix == 5:
+            math()
+        elif choix == 6:
+            while True :
+                #demadner input d'un nombre négatif de l'UserWarning(
+                X = int(input("Entrez X un nombre négatif : "))
+                N = int(input("Entrez N, un nombre positif : "))
+                if X > 0 :
+                    print("X doit être inférieur à 0")
+                elif N < 0 :
+                    print("N doit être supérieur à 0")
+                else :
+                    break
+            print("RES=",RES(X,N))
+        elif choix == 7:
+            print("Au revoir")
+            break
+        else:
+            print("Erreur, veuillez recommencer")
 
 menu()
