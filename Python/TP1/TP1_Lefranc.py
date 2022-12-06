@@ -41,8 +41,13 @@ def calcul_surface() :
 
 #fonction qui demande un entier positif et qui calcul la somme et le factoriel de l'entier
 def somme_factoriel() :
+    print("\nVous allez entrer un entier positif et je vais vous donner la somme et le factoriel de l'entier\n")
     while True:
-        entier = int(input("Entrez un entier positif : "))
+        while True:
+            entier = input("Entrez un entier positif : ")
+            if estunnombre(entier):
+                entier=int(entier)
+                break
         somme = 0
         factoriel = 1
         for i in range(1, entier+1):
@@ -76,10 +81,10 @@ def somme_factoriel() :
             if i==entier :
                 print(i)
             else:
-                print(i, "+", end=" ")       
+                print(i, "*", end=" ")       
         print("Voulez-vous recommencer ? (O/N)")
         reponse = input()
-        if reponse == "N" | reponse == "n":
+        if reponse == "N" or reponse == "n":
             break
     print("Merci a bientôt")
 
