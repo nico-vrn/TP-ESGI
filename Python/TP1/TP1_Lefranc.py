@@ -28,9 +28,15 @@ def ASCII () :
 #fonction qui calcule la surface d'un trapèze
 def calcul_surface() :
     print("\nVous allez entrer la longueur des deux bases et la hauteur d'un trapèze et je vais vous donner sa surface\n")
-    A = int(input("Entrez A (en m): "))
-    B = int(input("Entrez B (en m): "))
-    C = int(input("Entrez C (en m): "))
+    while True:
+        A = input("Entrez A (en m): ")
+        B = input("Entrez B (en m): ")
+        C = input("Entrez C (en m): ")
+        if estunnombre(A) and estunnombre(B) and estunnombre(C):
+            A=int(A)
+            B=int(B)
+            C=int(C)
+            break
     print("La surface est de : ", (A+B)*C/2, "m²")
 
 #fonction qui demande un entier positif et qui calcul la somme et le factoriel de l'entier
