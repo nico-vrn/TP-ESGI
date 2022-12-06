@@ -181,9 +181,9 @@ def U_V(N):
         if i==1:
             un1=1
         un1=un1+1/factoriel(N)
-        print("U(",i,") de",N,"=",round(un1,2))
+        print("U(",i,") de",N,"=",round(un1,4))
         uv1=un1+1/(N*factoriel(N))
-        print("V(",i,") de",N,"=",round(uv1,2))
+        print("V(",i,") de",N,"=",round(uv1,4))
 
 #fonction qui permet de calculer ces chance de gagné au tiercé/quarté.. en fonction du nombre de chevaux et du nombre de chevaux joué
 def tierce(N,P):
@@ -238,7 +238,7 @@ def menu() :
                             break
                 print("RES=",RES(X,N))
             elif choix == 7:
-                print("Entrez un nombre entier je vais vous donner les résultats des fonctions U et V")
+                print("\nEntrez un nombre entier je vais vous donner les résultats des fonctions U et V")
                 while True :
                     N = input("\nEntrez un nombre N, positif: ")
                     if estunnombre(N):
@@ -253,7 +253,10 @@ def menu() :
                     if estunnombre(N) and estunnombre(P):
                         N=int(N)
                         P=int(P)
-                        break
+                        if N!=P:
+                            print("N doit être égal à P")
+                        else :
+                            break
                 tierce(N,P)
             elif choix == 9:
                 print("Merci d'avoir participé, au revoir")
