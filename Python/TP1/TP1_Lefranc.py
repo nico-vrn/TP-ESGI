@@ -1,5 +1,12 @@
 import turtle
 
+def estunnombre(X):
+    if X.isdigit():
+        return True
+    else:
+        print("Entrez un nombre entier positif") 
+        return False
+
 #fonction qui donne le code ASCII d'un caractère et inversement
 def ASCII () :
     while True:
@@ -144,54 +151,59 @@ def menu() :
         print("7. fonctions U et V")
         print("8. Tiercé")
         print("9. Quitter")
-        choix = int(input("Entrez votre choix : "))
-        if choix == 1:
-            ASCII()
-        elif choix == 2:
-            calcul_surface()
-        elif choix == 3:
-            somme_factoriel()
-        elif choix == 4:
-            nombre = int(input("Entrez le nombre de lignes : "))
-            caractere = input("Entrez le caractère : ")
-            arbre_noel(nombre,caractere)
-        elif choix == 5:
-            math()
-        elif choix == 6:
-            while True :
-                #demadner input d'un nombre négatif de l'UserWarning(
-                X = int(input("\nEntrez X un nombre négatif : "))
-                N = int(input("Entrez N, un nombre positif : "))
-                if X > 0 :
-                    print("X doit être inférieur à 0")
-                elif N < 0 :
-                    print("N doit être supérieur à 0")
-                else :
-                    break
-            print("RES=",RES(X,N))
-        elif choix == 7:
-            while True :
-                N = int(input("\nEntrez un nombre N, positif: "))
-                if N < 0 :
-                    print("N doit être supérieur à 0")
-                else :
-                    break
-            U_V(N)
-        elif choix == 8:
-            while True :
-                N = int(input("\nEntrez le nombre de chevaux partants (nombre positif): "))
-                P = int(input("Entrez le nombre de chevaux joués (nombre positif): "))
-                if N < 0 :
-                    print("N doit être supérieur à 0")
-                elif P < 0 :
-                    print("P doit être supérieur à 0")
-                else :
-                    break
-            tierce(N,P)
-        elif choix == 9:
-            print("Merci d'avoir participé, au revoir")
-            break
-        else:
-            print("\nErreur, veuillez recommencer en utilisant un nombre de la liste :")
+        choix = input("Entrez votre choix : ")
+        if estunnombre(choix):
+            choix=int(choix)
+            if choix == 1:
+                ASCII()
+            elif choix == 2:
+                calcul_surface()
+            elif choix == 3:
+                somme_factoriel()
+            elif choix == 4:
+                while True:
+                    nombre = input("Entrez le nombre de ligne (nombre positif) : ")
+                    if estunnombre(nombre):
+                        nombre=int(nombre)
+                        if nombre>0:
+                            break
+                caractere = input("Entrez le caractère : ")
+                arbre_noel(nombre,caractere)
+            elif choix == 5:
+                math()
+            elif choix == 6:
+                while True :
+                    #demadner input d'un nombre négatif de l'UserWarning(
+                    X = input("\nEntrez X un nombre négatif : ")
+                    N = input("Entrez N, un nombre positif : ")
+                    if estunnombre(N):
+                        X=int(X)
+                        N=int(N)
+                        if X > 0 :
+                            print("X doit être inférieur à 0")
+                        else :
+                            break
+                print("RES=",RES(X,N))
+            elif choix == 7:
+                while True :
+                    N = input("\nEntrez un nombre N, positif: ")
+                    if estunnombre(N):
+                        N=int(N)
+                        break
+                U_V(N)
+            elif choix == 8:
+                while True :
+                    N = input("\nEntrez le nombre de chevaux partants (nombre positif): ")
+                    P = input("Entrez le nombre de chevaux joués (nombre positif): ")
+                    if estunnombre(N) and estunnombre(P):
+                        N=int(N)
+                        P=int(P)
+                        break
+                tierce(N,P)
+            elif choix == 9:
+                print("Merci d'avoir participé, au revoir")
+                break
+            else:
+                print("\nErreur, veuillez recommencer en utilisant un nombre de la liste :")
 
 menu()
