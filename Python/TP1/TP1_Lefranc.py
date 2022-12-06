@@ -3,11 +3,12 @@ import tkinter
 from tkinter import *
 from math import *
 
+#fonction qui vérifie si un nombre donnée est bien un nombre et pas un caractère
 def estunnombre(X):
     if X.isdigit():
         return True
     else:
-        print("Entrez un nombre entier") 
+        print("Entrez un nombre entier comme indiqué") 
         return False
 
 #fonction qui donne le code ASCII d'un caractère et inversement
@@ -171,12 +172,13 @@ def factoriel(n):
     #print("factoriel de", n,"=", result)
     return result
 
-#fonction qui fait F1=x^N/factoriel(N)
+#fonction qui fait F1=x^N/factoriel(N) N étant en paramètre
 def F1(X,N):
     f1=(X**N)/factoriel(N)
     #print("factoriel de",N,"est : ",factoriel(N))
     return f1
 
+#fonction demandé
 def RES(X,N):
     res=0
     for i in range(1,N+1):
@@ -189,7 +191,7 @@ def RES(X,N):
     #print("verif math.exp(",X,")=",math.exp(X))
     return res
 
-#fonction qui calcul la fonfonction U(n) et V(n) en fonction de n
+#fonction qui calcul la fonfonction U(n) et V(n) en fonction de n en paramètre
 def U_V(N):
     for i in range(1,N+1):
         if i==1:
