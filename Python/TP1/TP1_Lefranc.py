@@ -1,4 +1,4 @@
-import turtle
+import math
 
 def estunnombre(X):
     if X.isdigit():
@@ -113,11 +113,15 @@ def arbre_noel(nombre,caractere) :
 
 #fonction qui demande un entier puis afficher son logarithme népérien, son sinus et son cosinus
 def math() :
-    entier = int(input("Entrez un entier : "))
-    import math
-    print("Le logarithme népérien de", entier, "est : ", math.log(entier))
-    print("Le sinus de", entier, "est : ", math.sin(entier))
-    print("Le cosinus de", entier, "est : ", math.cos(entier))
+    print("\nVous allez entrer un entier et je vais vous donner son logarithme népérien, son sinus et son cosinus\n")
+    while True:
+        entier = input("Entrez un entier : ")
+        if estunnombre(entier):
+            entier=int(entier)
+            break
+    print("Le logarithme népérien de", entier, "est : ", round(math.log(entier),2))
+    print("Le sinus de", entier, "est : ", round(math.sin(entier),2))
+    print("Le cosinus de", entier, "est : ", round(math.cos(entier),2))
 
 #fonction qui calcul le factoriel d'un nombre en paramètre
 def factoriel(n):
@@ -163,7 +167,7 @@ def menu() :
         print("2. Calcul de surface")
         print("3. Somme et factoriel")
         print("4. Arbre de noël")
-        print("5. Fonctions mathématiques")
+        print("5. Fonctions mathématiques (logarithme, sinus, cosinus)")
         print("6. Fonctions")
         print("7. fonctions U et V")
         print("8. Tiercé")
