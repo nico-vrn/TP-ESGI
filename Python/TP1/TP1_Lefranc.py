@@ -167,8 +167,12 @@ def RES(X,N):
     res=0
     for i in range(1,N+1):
         #print("i=",i)
-        res+=F1(X,i)
-        #print("F1 de",X,"et",i,"est : ",F1(X,i))
+        fonction1=F1(X,i)
+        res+=fonction1
+        #print("F1 de",X,"et",i,"est : ",fonction1)
+        #print("RES =",res)
+    import math
+    #print("verif math.exp(",X,")=",math.exp(X))
     return res
 
 #fonction qui calcul la fonfonction U(n) et V(n) en fonction de n
