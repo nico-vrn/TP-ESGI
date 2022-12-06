@@ -100,6 +100,7 @@ def factoriel(n):
     if n == 0:
         return 1
     else:
+        #print("factoriel de", n,"=",n * factoriel(n-1))
         return n * factoriel(n-1)
 
 #fonction qui fait F1=x^N/factoriel(N)
@@ -125,6 +126,12 @@ def U_V(N):
         uv1=un1+1/(N*factoriel(N))
         print("V(",i,") de",N,"=",round(uv1,2))
 
+def tierce(N,P):
+    X=factoriel(N)/(factoriel(N-P))
+    Y=factoriel(N)/(factoriel(P)*(factoriel(N-P)))
+    print("Dans l'ordre: une chance sur",X,"de gagner")
+    print("Dans le désordre: une chance sur",Y,"de gagner")
+
 #menu
 def menu() :
     while True:
@@ -135,7 +142,8 @@ def menu() :
         print("5. Fonctions mathématiques")
         print("6. Fonctions")
         print("7. fonctions U et V")
-        print("8. Quitter")
+        print("8. Tiercé")
+        print("9. Quitter")
         choix = int(input("Entrez votre choix : "))
         if choix == 1:
             ASCII()
@@ -170,9 +178,20 @@ def menu() :
                     break
             U_V(N)
         elif choix == 8:
-            print("Au revoir")
+            while True :
+                N = int(input("\nEntrez le nombre de chevaux partants (nombre positif): "))
+                P = int(input("Entrez le nombre de chevaux joués (nombre positif): "))
+                if N < 0 :
+                    print("N doit être supérieur à 0")
+                elif P < 0 :
+                    print("P doit être supérieur à 0")
+                else :
+                    break
+            tierce(N,P)
+        elif choix == 9:
+            print("Merci d'avoir participé, au revoir")
             break
         else:
-            print("\nErreur, veuillez recommencer :")
+            print("\nErreur, veuillez recommencer en utilisant un nombre de la liste :")
 
 menu()
