@@ -171,6 +171,7 @@ def RES(X,N):
         #print("F1 de",X,"et",i,"est : ",F1(X,i))
     return res
 
+#fonction qui calcul la fonfonction U(n) et V(n) en fonction de n
 def U_V(N):
     for i in range(1,N+1):
         if i==1:
@@ -180,6 +181,7 @@ def U_V(N):
         uv1=un1+1/(N*factoriel(N))
         print("V(",i,") de",N,"=",round(uv1,2))
 
+#fonction qui permet de calculer ces chance de gagné au tiercé/quarté.. en fonction du nombre de chevaux et du nombre de chevaux joué
 def tierce(N,P):
     X=factoriel(N)/(factoriel(N-P))
     Y=factoriel(N)/(factoriel(P)*(factoriel(N-P)))
