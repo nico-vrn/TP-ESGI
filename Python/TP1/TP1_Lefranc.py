@@ -45,10 +45,18 @@ def calcul_surface() :
 
 #fonction qui dessine un trapèze avec tkinter de taille A B et C
 def dessin(A,B,C):
+    print('\nla définition d\'un trapèze est : Quadrilatère dont deux côtés sont parallèles (surtout lorsqu\'ils sont inégaux). ')
+    print("en voici un que j'ai dessiné pour vous : (fermer la fenêtre de dessin pour continuer)")
     fenetre = Tk()
-    canvas = Canvas(fenetre, width=250, height=500, bg='white')
-    X=125
-    Y=100
+    if A<B:
+        width=B*10
+        X=(width/2)+B/2
+    else :
+        width=A*10
+        X=(width/2)-A/2
+    height=C*10
+    canvas = Canvas(fenetre, width=width, height=height, bg='white')
+    Y=(height/2)+C
     canvas.pack()
     canvas.create_line(X,Y,X+A,Y,fill='red',width=1)
     canvas.create_line(X+A,Y,X+A,Y-C,fill='red',width=2)
