@@ -151,15 +151,15 @@ def math() :
 
 #fonction qui calcul le factoriel d'un nombre en paramètre
 def factoriel(n):
-    if n == 0:
-        return 1
-    else:
-        #print("factoriel de", n,"=",n * factoriel(n-1))
-        return n * factoriel(n-1)
+    result = 1
+    for i in range(1, n+1):
+        result = result * i
+    #print("factoriel de", n,"=", result)
+    return result
 
 #fonction qui fait F1=x^N/factoriel(N)
 def F1(X,N):
-    f1=(X**N)/(factoriel(N))
+    f1=(X**N)/factoriel(N)
     #print("factoriel de",N,"est : ",factoriel(N))
     return f1
 
@@ -204,6 +204,7 @@ def menu() :
         print("7. fonctions U et V")
         print("8. Tiercé")
         print("9. Quitter")
+        print("10. Test")
         choix = input("Entrez votre choix : ")
         if estunnombre(choix):
             choix=int(choix)
@@ -236,7 +237,7 @@ def menu() :
                             print("X doit être inférieur à 0")
                         else :
                             break
-                print("RES=",RES(X,N))
+                print("RES=",round(RES(X,N),4))
             elif choix == 7:
                 print("\nEntrez un nombre entier je vais vous donner les résultats des fonctions U et V")
                 while True :
@@ -261,6 +262,8 @@ def menu() :
             elif choix == 9:
                 print("Merci d'avoir participé, au revoir")
                 break
+            elif choix == 10:
+               print("test")
             else:
                 print("\nErreur, veuillez recommencer en utilisant un nombre de la liste :")
 
