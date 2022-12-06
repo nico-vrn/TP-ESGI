@@ -146,8 +146,8 @@ def math() :
             break
     import math
     print("Le logarithme népérien de", entier, "est : ", round(math.log(entier),2))
-    print("Le sinus de", entier, "est : ", round(math.sin(entier),2))
-    print("Le cosinus de", entier, "est : ", round(math.cos(entier),2))
+    print("Le sinus de", entier, "est : ", round(math.sin(entier),2),"en radian")
+    print("Le cosinus de", entier, "est : ", round(math.cos(entier),2),"en radiant")
 
 #fonction qui calcul le factoriel d'un nombre en paramètre
 def factoriel(n):
