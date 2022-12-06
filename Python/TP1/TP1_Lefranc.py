@@ -1,4 +1,7 @@
 import math
+import tkinter
+from tkinter import *
+from math import *
 
 def estunnombre(X):
     if X.isdigit():
@@ -27,7 +30,7 @@ def ASCII () :
 
 #fonction qui calcule la surface d'un trapèze
 def calcul_surface() :
-    print("\nVous allez entrer la longueur des deux bases et la hauteur d'un trapèze et je vais vous donner sa surface\n")
+    print("\nVous allez entrer la longueur des deux bases et la hauteur d'un trapèze et je vais vous donner sa surface puis le dessiner\n")
     while True:
         A = input("Entrez A (en m): ")
         B = input("Entrez B (en m): ")
@@ -38,6 +41,20 @@ def calcul_surface() :
             C=int(C)
             break
     print("La surface est de : ", (A+B)*C/2, "m²")
+    dessin(A, B, C)
+
+#fonction qui dessine un trapèze avec tkinter de taille A B et C
+def dessin(A,B,C):
+    fenetre = Tk()
+    canvas = Canvas(fenetre, width=250, height=500, bg='white')
+    X=125
+    Y=100
+    canvas.pack()
+    canvas.create_line(X,Y,X+A,Y,fill='red',width=1)
+    canvas.create_line(X+A,Y,X+A,Y-C,fill='red',width=2)
+    canvas.create_line(X+A,Y-C,(X+A)-B,Y-C,fill='red',width=2)
+    canvas.create_line((X+A)-B,Y-C,X,Y,fill='red',width=2)
+    fenetre.mainloop()
 
 #fonction qui demande un entier positif et qui calcul la somme et le factoriel de l'entier
 def somme_factoriel() :
