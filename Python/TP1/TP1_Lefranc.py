@@ -9,19 +9,25 @@ def estunnombre(X):
 
 #fonction qui donne le code ASCII d'un caractère et inversement
 def ASCII () :
+    print("\nVous allez entrer un caractère et un nombre entier et je vais vous donner le code ASCII du caractère et le caractère correspondant au nombre entier")
     while True:
-        caractere = input("Entrez un caractère : ")
-        entier = int(input("Entrez un entier: "))
+        caractere = input("\nEntrez un caractère : ")
+        while True:
+            entier = input("Entrez un entier: ")
+            if estunnombre(entier):
+                entier=int(entier)
+                break
         print("Le caractère", caractere, " en hexadécimal est : ", ord(caractere))
         print("L'entier", entier, "en hexadécimal est : ", chr(entier))
         print("Voulez-vous recommencer ? (O/N)")
         reponse = input()
-        if reponse == "N" | reponse == "n":
+        if reponse == "N" or reponse == "n":
             break
     print("Merci a bientôt")
 
 #fonction qui calcule la surface d'un trapèze
 def calcul_surface() :
+    print("\nVous allez entrer la longueur des deux bases et la hauteur d'un trapèze et je vais vous donner sa surface\n")
     A = int(input("Entrez A (en m): "))
     B = int(input("Entrez B (en m): "))
     C = int(input("Entrez C (en m): "))
