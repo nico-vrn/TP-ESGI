@@ -116,25 +116,39 @@ def somme_factoriel() :
 #fonction qui fais un sapin du nombre de ligne et de caractère saisie par l'utilisateur
 def arbre_noel(nombre,caractere) :
     for i in range(1, nombre+1):
-        for j in range(1, nombre-i+1):
+        for j in range(1, nombre-i+3+1):
             print("=", end="")
         for j in range(1, i+1):
             print(caractere, end="")
         for j in range(1, i):
             print(caractere, end="")
+        for j in range(1, nombre-i+3+1):
+            print("=", end="")
         print("")
-        i=1
-    while (i<=nombre-1):
+
+    i=1
+    while (i<=nombre+3-1):
         print("=", end="")
         i+=1
-    print(caractere)
+    print(caractere, end="")
+    j=1
+    while(j<=nombre+3-1):
+        print("=", end="")
+        j+=1
+    print("")
+    
     i=2
-    while (i<=nombre-1):
+    while (i<=nombre+3-1):
         print("=", end="")
         i+=1
     for h in range (0,3):
         print(caractere, end="")
-    print("\n************* Joyeux Noel *************")
+    j=1
+    while(j<=nombre+3-1):
+        print("=", end="")
+        j+=1
+
+    print("\n\n************* Joyeux Noel *************")
 
 #fonction qui demande un entier puis afficher son logarithme népérien, son sinus et son cosinus
 def math() :
