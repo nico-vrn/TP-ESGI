@@ -178,6 +178,7 @@ def menu() :
             elif choix == 3:
                 somme_factoriel()
             elif choix == 4:
+                print("\nVous allez entrer un nombre de ligne et un caractère et je vais vous faire un beau sapin\n")
                 while True:
                     nombre = input("Entrez le nombre de ligne (nombre positif) : ")
                     if estunnombre(nombre):
