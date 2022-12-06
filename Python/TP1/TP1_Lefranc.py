@@ -196,7 +196,6 @@ def menu() :
                 math()
             elif choix == 6:
                 while True :
-                    #demadner input d'un nombre négatif de l'UserWarning(
                     X = input("\nEntrez X un nombre négatif : ")
                     N = input("Entrez N, un nombre positif : ")
                     if estunnombre(N):
@@ -208,6 +207,7 @@ def menu() :
                             break
                 print("RES=",RES(X,N))
             elif choix == 7:
+                print("Entrez un nombre entier je vais vous donner les résultats des fonctions U et V")
                 while True :
                     N = input("\nEntrez un nombre N, positif: ")
                     if estunnombre(N):
@@ -215,6 +215,7 @@ def menu() :
                         break
                 U_V(N)
             elif choix == 8:
+                print("\nEntrez un nombre entier N correspondant aux nombres de chevaux partants et un nombre entier P correspondant aux nombres de chevaux joués, je vais vous donner les résultats des fonctions tiercé")
                 while True :
                     N = input("\nEntrez le nombre de chevaux partants (nombre positif): ")
                     P = input("Entrez le nombre de chevaux joués (nombre positif): ")
