@@ -7,7 +7,7 @@ def estunnombre(X):
     if X.isdigit():
         return True
     else:
-        print("Entrez un nombre entier positif") 
+        print("Entrez un nombre entier") 
         return False
 
 #fonction qui donne le code ASCII d'un caractère et inversement
@@ -225,7 +225,7 @@ def menu() :
                 while True :
                     X = input("\nEntrez X un nombre négatif : ")
                     N = input("Entrez N, un nombre positif : ")
-                    if estunnombre(N):
+                    if estunnombre(N) and estunnombre(X.lstrip('-')):
                         X=int(X)
                         N=int(N)
                         if X > 0 :
