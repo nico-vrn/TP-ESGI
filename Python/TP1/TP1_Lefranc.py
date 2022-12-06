@@ -116,6 +116,15 @@ def RES(X,N):
         #print("F1 de",X,"et",i,"est : ",F1(X,i))
     return res
 
+def U_V(N):
+    for i in range(1,N+1):
+        if i==1:
+            un1=1
+        un1=un1+1/factoriel(N)
+        print("U(",i,") de",N,"=",round(un1,2))
+        uv1=un1+1/(N*factoriel(N))
+        print("V(",i,") de",N,"=",round(uv1,2))
+
 #menu
 def menu() :
     while True:
@@ -125,7 +134,8 @@ def menu() :
         print("4. Arbre de noël")
         print("5. Fonctions mathématiques")
         print("6. Fonctions")
-        print("7. Quitter")
+        print("7. fonctions U et V")
+        print("8. Quitter")
         choix = int(input("Entrez votre choix : "))
         if choix == 1:
             ASCII()
@@ -142,7 +152,7 @@ def menu() :
         elif choix == 6:
             while True :
                 #demadner input d'un nombre négatif de l'UserWarning(
-                X = int(input("Entrez X un nombre négatif : "))
+                X = int(input("\nEntrez X un nombre négatif : "))
                 N = int(input("Entrez N, un nombre positif : "))
                 if X > 0 :
                     print("X doit être inférieur à 0")
@@ -152,9 +162,17 @@ def menu() :
                     break
             print("RES=",RES(X,N))
         elif choix == 7:
+            while True :
+                N = int(input("\nEntrez un nombre N, positif: "))
+                if N < 0 :
+                    print("N doit être supérieur à 0")
+                else :
+                    break
+            U_V(N)
+        elif choix == 8:
             print("Au revoir")
             break
         else:
-            print("Erreur, veuillez recommencer")
+            print("\nErreur, veuillez recommencer :")
 
 menu()
