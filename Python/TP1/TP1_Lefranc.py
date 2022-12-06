@@ -119,6 +119,7 @@ def math() :
         if estunnombre(entier):
             entier=int(entier)
             break
+    import math
     print("Le logarithme népérien de", entier, "est : ", round(math.log(entier),2))
     print("Le sinus de", entier, "est : ", round(math.sin(entier),2))
     print("Le cosinus de", entier, "est : ", round(math.cos(entier),2))
