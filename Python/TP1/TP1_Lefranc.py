@@ -136,7 +136,7 @@ def arbre_noel(nombre,caractere) :
         print("=", end="")
         j+=1
     print("")
-    
+
     i=2
     while (i<=nombre+3-1):
         print("=", end="")
@@ -218,7 +218,6 @@ def menu() :
         print("7. fonctions U et V")
         print("8. Tiercé")
         print("9. Quitter")
-        print("10. Test")
         choix = input("Entrez votre choix : ")
         if estunnombre(choix):
             choix=int(choix)
@@ -276,8 +275,6 @@ def menu() :
             elif choix == 9:
                 print("Merci d'avoir participé, au revoir")
                 break
-            elif choix == 10:
-               print("test")
             else:
                 print("\nErreur, veuillez recommencer en utilisant un nombre de la liste :")
 
