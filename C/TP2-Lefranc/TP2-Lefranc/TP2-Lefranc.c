@@ -234,7 +234,7 @@ void jeu_des(nb_parties)
     printf("\nVous avez joue %d parties, %d parties gagnes et %d parties perdus. Soit %d%% de gain. \n", nb_parties, partie_gagne, partie_perdu, partie_gagne*100/nb_parties);
 }
 
-
+//menu principal
 int main()
 {
 	int choix, n, nb_parties;
