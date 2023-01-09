@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <ctype.h>
-#include <math.h>
-#include <stdbool.h>
-//#include "TP2-Lefranc.h"
+#include "TP2-Lefranc.h"
 
 //fonction qui demande 3 chiffre A B et C et résoud cette équation : Ax2 + Bx + C = 0
 void equation()
@@ -125,6 +119,7 @@ int nb;
 int tab_des[3];
 int tab_bon[3]={0,0,0};
 
+//fonction qui demande un nombre N puis lance N dés et affiche le résultat
 void lancer_des(nb)
 {
     //printf("nb_des= %d \n", nb);
@@ -149,7 +144,7 @@ void lancer_des(nb)
     printf("\n");
 }
 
-//fonction qui vérifie pour chaque case du tableau si il contient un 4 un 2 ou un 1
+//fonction qui demande un nombre N puis lance N parties du jeu des dés et affiche le nombre de parties gagnées et perdues
 void jeu_des(nb_parties)
 {
     printf("\nBienvenue dans le jeu des des !\n");
