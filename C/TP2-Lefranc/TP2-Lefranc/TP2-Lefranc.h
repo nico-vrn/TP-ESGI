@@ -26,6 +26,11 @@ int fibonacci(int n);
 */
 void nb_or();
 
+int lance_des();
+
+//---------------------------------------------------------
+//pas moi qui l'ai fait :
+
 void dice();
 
 
@@ -43,13 +48,6 @@ extern bool in(short value, short *array, short size);
  * @return false 
  */
 extern bool all_in(short *list, short *array, short size);
-
-/**
- * @brief Fonction qui permet de lancer un dé
- * 
- * @return short 
- */
-extern short roll_dice();
 
 /**
  * @brief Fonction qui permet d'afficher les nombres obtenus
