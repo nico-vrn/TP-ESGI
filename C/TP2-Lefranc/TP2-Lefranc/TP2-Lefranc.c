@@ -3,6 +3,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <math.h>
+#include <stdbool.h>
 //#include "TP2-Lefranc.h"
 
 //fonction qui demande 3 chiffre A B et C et résoud cette équation : Ax2 + Bx + C = 0
@@ -119,9 +120,110 @@ void nb_or()
     printf("Le nombre d'or est egal a %f", on);
 }
 
+int nb=3;
+int tab_des[2];
+int tab_bon[2]={0,0,0};
+
+int lancer_des(nb)
+{
+    int i, des; 
+    for (i = 0; i <= nb; i++)
+    {
+        des = rand()%6+1;
+        //printf("Le des %d est egal a %d \n", i, des);
+        tab_des[i] = des;
+        //printf("tab_des[%d] = %d \n", i, tab_des[i]);
+    }
+    printf("votre lancer est : %d, %d et %d \n", tab_des[0], tab_des[1], tab_des[2]);
+    return des;
+}
+
+//fonction qui vérifie pour chaque case du tableau si il contient un 4 un 2 ou un 1
+void jeu_des(nb_parties)
+{
+    printf("\nBienvenue dans le jeu des des !\n");
+    printf("Il va falloir obtenir 421 pour gagner en moins de 3 lancers. \n");
+
+    int parties=0;
+    srand(time(NULL));
+    for(int f=0;f<nb_parties;f++){
+        int j=0;
+        while (j<3){
+            printf("\n\nLancer numero %d, partie numero %d \n", j+1, f+1);
+            lancer_des(nb);
+            int i;
+            for (i = 0; i <= nb; i++)
+            {
+                if (tab_des[i] == 4)
+                {
+                    printf("Le des %d est egal a 4, ", i);
+                    if (tab_bon[0]!=4){
+                        tab_bon[0]=4;
+                        nb-=1;
+                        printf("top je garde ! \n");
+                    }
+                    else{
+                        printf(" mais il est deja sorti .. \n");
+                    }
+                }
+                else if (tab_des[i] == 2)
+                {
+                    printf("Le des %d est egal a 2, ", i);
+                    if (tab_bon[1]!=2){
+                        tab_bon[1]=2;
+                        nb-=1;
+                        printf("top je garde ! \n");
+                    }
+                    else{
+                        printf(" mais il est deja sorti .. \n");
+                    }
+                }
+                else if (tab_des[i] == 1)
+                {
+                    printf("Le des %d est egal a 1, ", i);
+                    if (tab_bon[2]!=1){
+                        tab_bon[2]=1;
+                        nb-=1;
+                        printf("top je garde ! \n");
+                    }
+                    else{
+                        printf(" mais il est deja sorti .. \n");
+                    }
+                }
+                tab_des[i]=0;
+            }
+            printf("Il vous reste %d des \n", nb);
+            //printf("tab_des= %d %d %d \n", tab_des[0], tab_des[1], tab_des[2]);
+            j++;
+            printf("Des gardes : ");
+            if(tab_bon[0]==4){
+                printf("4 ");
+            }
+            if(tab_bon[1]==2){
+                printf("2 ");
+            }
+            if(tab_bon[2]==1){
+                printf("1");
+            }
+            if(tab_bon[0]!=4 && tab_bon[1]!=2 && tab_bon[2]!=1){
+                printf("Aucun \n");
+            }
+        }
+        if (tab_bon[0]==4 && tab_bon[1]==2 && tab_bon[2]==1){
+            printf("\nVous avez gagnez !! \n");
+        }
+        else{
+            printf("\nVous avez perdu vous n'avez pas obtenu 421 en 3 lancers \n");
+        }
+        tab_bon[0]=0; tab_bon[1]=0; tab_bon[2]=0; nb=3;
+        //printf("tab_bon=%d %d %d", tab_bon[0], tab_bon[1], tab_bon[2]);
+    }
+}
+
+
 int main()
 {
-	int choix, n;
+	int choix, n, nb_parties;
 	do
 	{
 		printf("\n \n Choississez votre Fonction a utiliser \n");
@@ -151,7 +253,9 @@ int main()
 			nb_or();
 			break;
 		case 5:
-            //
+            printf("combien de partie voulez-vous jouez ?");
+            scanf("%d", &nb_parties);
+            jeu_des(nb_parties);
 			break;
 		case 8:
 			printf("Au revoir \n");
