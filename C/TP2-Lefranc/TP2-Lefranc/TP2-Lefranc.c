@@ -10,7 +10,7 @@
 void equation()
 {
     float a, b, c, delta, x1, x2;
-    printf("Resoudre l’equation du second degre : Ax2 + Bx + C = 0 \n");
+    printf("\nResoudre l\'equation du second degre : Ax2 + Bx + C = 0 \n");
     printf("Entrez A :");
     scanf("%f", &a);
     printf("Entrez B :");
@@ -40,7 +40,7 @@ void suite()
 {
     int n, i;
     float u0=2, un, un1;
-    printf("Calcul de la suite definie par u0=2 un+1=1/2(un+2/un) \n");
+    printf("\nCalcul de la suite definie par u0=2 un+1=1/2(un+2/un) \n");
     printf("Entrez N :");
     scanf("%d", &n);
     printf("U[0] = %.2f \n", u0);
@@ -67,6 +67,7 @@ void suite()
     {
         printf("La suite tend vers 0");
     }
+    printf("\nCette suite tant vers le resultat positif de la resolution de l\'equation xcarre-2 qui est %.2f .", un);
 }
 
 //fonction qui calcule le nombre de Fibonacci d'un nombre N
@@ -99,7 +100,7 @@ void nb_or()
 {
     int n, i;
     float fn, fn1, fn2, on;
-    printf("Calcul de la suite definie par O[n]=F[n+1]/F[n] \n");
+    printf("\nCalcul de la suite definie par O[n]=F[n+1]/F[n] \n");
     printf("Entrez N :");
     scanf("%d", &n);
     for (i = 1; i <= n; i++)
@@ -120,21 +121,32 @@ void nb_or()
     printf("Le nombre d'or est egal a %f", on);
 }
 
-int nb=3;
-int tab_des[2];
-int tab_bon[2]={0,0,0};
+int nb;
+int tab_des[3];
+int tab_bon[3]={0,0,0};
 
 void lancer_des(nb)
 {
+    //printf("nb_des= %d \n", nb);
     int i, des; 
-    for (i = 0; i <= nb; i++)
+    for (i = 0; i < nb; i++)
     {
         des = rand()%6+1;
         //printf("Le des %d est egal a %d \n", i, des);
         tab_des[i] = des;
         //printf("tab_des[%d] = %d \n", i, tab_des[i]);
     }
-    printf("votre lancer est : %d, %d et %d \n", tab_des[0], tab_des[1], tab_des[2]);
+    printf("votre lancer est :");
+    if (nb==1){
+        printf(" %d ", tab_des[0]);
+    }
+    else if (nb==2){
+        printf(" %d %d ", tab_des[0], tab_des[1]);
+    }
+    else if (nb==3){
+        printf(" %d %d %d ", tab_des[0], tab_des[1], tab_des[2]);
+    }
+    printf("\n");
 }
 
 //fonction qui vérifie pour chaque case du tableau si il contient un 4 un 2 ou un 1
@@ -143,19 +155,20 @@ void jeu_des(nb_parties)
     printf("\nBienvenue dans le jeu des des !\n");
     printf("Il va falloir obtenir 421 pour gagner en moins de 3 lancers. \n");
 
-    int parties=0;
+    int parties=0; int partie_gagne=0; int partie_perdu=0; nb=3;
     srand(time(NULL));
     for(int f=0;f<nb_parties;f++){
         int j=0;
         while (j<3){
-            printf("\n\nLancer numero %d, partie numero %d :\n", j+1, f+1);
+            printf("\n\nLancer numero %d, partie numero %d avec %d des :\n", j+1, f+1, nb);
             lancer_des(nb);
-            int i;
-            for (i = 0; i <= nb; i++)
+            //printf("nb= %d \n", nb);
+            for (int i = 0; i <=nb; i++)
             {
+                //printf("\ni=%d, tab[%d]=%d \n", i, i, tab_des[i]);
                 if (tab_des[i] == 4)
                 {
-                    printf("Le des %d est egal a 4, ", i);
+                    printf("Le des %d est egal a 4, ", i+1);
                     if (tab_bon[0]!=4){
                         tab_bon[0]=4;
                         nb-=1;
@@ -167,7 +180,7 @@ void jeu_des(nb_parties)
                 }
                 else if (tab_des[i] == 2)
                 {
-                    printf("Le des %d est egal a 2, ", i);
+                    printf("Le des %d est egal a 2, ", i+1);
                     if (tab_bon[1]!=2){
                         tab_bon[1]=2;
                         nb-=1;
@@ -179,7 +192,7 @@ void jeu_des(nb_parties)
                 }
                 else if (tab_des[i] == 1)
                 {
-                    printf("Le des %d est egal a 1, ", i);
+                    printf("Le des %d est egal a 1, ", i+1);
                     if (tab_bon[2]!=1){
                         tab_bon[2]=1;
                         nb-=1;
@@ -214,14 +227,16 @@ void jeu_des(nb_parties)
         }
         if (tab_bon[0]==4 && tab_bon[1]==2 && tab_bon[2]==1){
             printf("\nVous avez gagnez !! \n");
+            partie_gagne+=1;
         }
         else{
             printf("\nVous avez perdu vous n'avez pas obtenu 421 en 3 lancers \n");
+            partie_perdu+=1;
         }
         tab_bon[0]=0; tab_bon[1]=0; tab_bon[2]=0; nb=3;
         //printf("tab_bon=%d %d %d", tab_bon[0], tab_bon[1], tab_bon[2]);
     }
-    printf("\nVous avez joue %d parties \n", nb_parties);
+    printf("\nVous avez joue %d parties, %d parties gagnes et %d parties perdus. Soit %d%% de gain. \n", nb_parties, partie_gagne, partie_perdu, partie_gagne*100/nb_parties);
 }
 
 
@@ -248,7 +263,7 @@ int main()
 			suite();
 			break;
 		case 3:
-            printf("Calcul du nombre de Fibonacci d'un nombre N \n");
+            printf("\nCalcul du nombre de Fibonacci d'un nombre N \n");
             printf("Entrez la valeur de n : ");
             scanf("%d", &n);
             printf("Le nombre de Fibonacci de %d est %d : F[%d] = %d", n,fibonacci(n),n,fibonacci(n));
