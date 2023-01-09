@@ -11,11 +11,11 @@ void equation()
 {
     float a, b, c, delta, x1, x2;
     printf("\nResoudre l\'equation du second degre : Ax2 + Bx + C = 0 \n");
-    printf("Entrez A :");
+    printf("Entrez A (un chiffre) :");
     scanf("%f", &a);
-    printf("Entrez B :");
+    printf("Entrez B (un chiffre) :");
     scanf("%f", &b);
-    printf("Entrez C :");
+    printf("Entrez C (un chiffre) :");
     scanf("%f", &c);
     delta = b*b - 4*a*c;
     if (delta < 0)
@@ -41,7 +41,7 @@ void suite()
     int n, i;
     float u0=2, un, un1;
     printf("\nCalcul de la suite definie par u0=2 un+1=1/2(un+2/un) \n");
-    printf("Entrez N :");
+    printf("Entrez N (un chiffre) :");
     scanf("%d", &n);
     printf("U[0] = %.2f \n", u0);
     un = u0;
@@ -101,7 +101,7 @@ void nb_or()
     int n, i;
     float fn, fn1, fn2, on;
     printf("\nCalcul de la suite definie par O[n]=F[n+1]/F[n] \n");
-    printf("Entrez N :");
+    printf("Entrez N (un chiffre) :");
     scanf("%d", &n);
     for (i = 1; i <= n; i++)
     {
@@ -264,7 +264,7 @@ int main()
 			break;
 		case 3:
             printf("\nCalcul du nombre de Fibonacci d'un nombre N \n");
-            printf("Entrez la valeur de n : ");
+            printf("Entrez la valeur de n (un chiffre) : ");
             scanf("%d", &n);
             printf("Le nombre de Fibonacci de %d est %d : F[%d] = %d", n,fibonacci(n),n,fibonacci(n));
 			break;
@@ -272,18 +272,18 @@ int main()
 			nb_or();
 			break;
 		case 5:
-            printf("combien de partie voulez-vous jouez ?");
+            printf("combien de partie voulez-vous jouez ? (un chiffre) :");
             scanf("%d", &nb_parties);
             jeu_des(nb_parties);
 			break;
-		case 8:
+		case 6:
 			printf("Au revoir \n");
 			break;
 		default:
 			printf("Choix invalide");
 			break;
 		}
-	} while (choix != 8);
+	} while (choix != 6);
 	return 0;
 }
 
