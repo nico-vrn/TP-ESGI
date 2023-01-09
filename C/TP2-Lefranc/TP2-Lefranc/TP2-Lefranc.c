@@ -247,7 +247,7 @@ int main()
 		printf("4. nombre d'or et fibonacci \n");
 		printf("5. Jeu de des \n");
 		printf("6. Quitter \n");
-		printf("Entrer votre choix : ");
+		printf("Entrer votre choix (un chiffre) : ");
 		scanf("%d", &choix);
 		switch (choix)
 		{
