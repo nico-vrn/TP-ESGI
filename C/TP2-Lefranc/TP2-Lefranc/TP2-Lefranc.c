@@ -124,7 +124,7 @@ int nb=3;
 int tab_des[2];
 int tab_bon[2]={0,0,0};
 
-int lancer_des(nb)
+void lancer_des(nb)
 {
     int i, des; 
     for (i = 0; i <= nb; i++)
@@ -135,7 +135,6 @@ int lancer_des(nb)
         //printf("tab_des[%d] = %d \n", i, tab_des[i]);
     }
     printf("votre lancer est : %d, %d et %d \n", tab_des[0], tab_des[1], tab_des[2]);
-    return des;
 }
 
 //fonction qui vérifie pour chaque case du tableau si il contient un 4 un 2 ou un 1
@@ -149,7 +148,7 @@ void jeu_des(nb_parties)
     for(int f=0;f<nb_parties;f++){
         int j=0;
         while (j<3){
-            printf("\n\nLancer numero %d, partie numero %d \n", j+1, f+1);
+            printf("\n\nLancer numero %d, partie numero %d :\n", j+1, f+1);
             lancer_des(nb);
             int i;
             for (i = 0; i <= nb; i++)
@@ -208,6 +207,10 @@ void jeu_des(nb_parties)
             if(tab_bon[0]!=4 && tab_bon[1]!=2 && tab_bon[2]!=1){
                 printf("Aucun \n");
             }
+            else if ((tab_bon[0]==4 && tab_bon[1]==2 && tab_bon[2]==1)&&j<3) {
+                printf("\nBRAVO ! Vous avez gagne en %d lancers !!", j);
+                break;
+            }
         }
         if (tab_bon[0]==4 && tab_bon[1]==2 && tab_bon[2]==1){
             printf("\nVous avez gagnez !! \n");
@@ -218,6 +221,7 @@ void jeu_des(nb_parties)
         tab_bon[0]=0; tab_bon[1]=0; tab_bon[2]=0; nb=3;
         //printf("tab_bon=%d %d %d", tab_bon[0], tab_bon[1], tab_bon[2]);
     }
+    printf("\nVous avez joue %d parties \n", nb_parties);
 }
 
 
