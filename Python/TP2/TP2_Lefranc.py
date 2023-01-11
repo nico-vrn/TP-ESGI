@@ -35,10 +35,12 @@ def jeu_allumettes():
     nom= input("Entrez votre nom : ")
     print("Bienvenue ",nom," dans le jeu des allumettes")
     print("Vous allez jouer contre l'ordinateur")
-    nb_allumettes= input("Choisir le nombre d'allumettes de départ:")
-    print("Vous allez pouvoir enlever 1,2 ou 3 allumettes")
-    if estunnombre(nb_allumettes):
-        nb_allumettes=int(nb_allumettes)
+    while True:
+        nb_allumettes= input("Choisir le nombre d'allumettes de départ:")
+        if estunnombre(nb_allumettes):
+            nb_allumettes=int(nb_allumettes)
+            break
+    print("\nVous allez pouvoir enlever 1,2 ou 3 allumettes :")
     while nb_allumettes>0:
         print("\nIl reste ",nb_allumettes," allumettes")
         #afficher les allumettes par des |
@@ -62,8 +64,13 @@ def jeu_allumettes():
                 break
 
 def fichier():
-    num1=int(input("Entrez un nombre entier : "))
-    num2=int(input("Entrez un nombre entier : "))
+    while True :
+        num1=input("Entrez un premier nombre entier : ")
+        num2=input("Entrez un second nombre entier : ")
+        if estunnombre(num1) and estunnombre(num2):
+            num1=int(num1)
+            num2=int(num2)
+            break
     with open ("BDD.bin","wb") as f:
         f.write(num1.to_bytes(4, "big"))
         f.write(num2.to_bytes(4, "big"))
