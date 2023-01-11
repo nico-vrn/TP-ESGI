@@ -163,7 +163,7 @@ void display_book_info(Book book) {
 
 int fct_book() {
     Book book1;
-    create_book(&book1, "Les Misérables", "Victor Hugo", "Folio", "9782070409235");
+    create_book(&book1, "Les Miserables", "Victor Hugo", "Folio", "9782070409235");
     display_book_info(book1);
     char new_name[30];
     char new_author[30];
@@ -171,12 +171,10 @@ int fct_book() {
     char new_barcode[30];
     get_book_attribute(book1, new_name, new_author, new_publisher, new_barcode);
     //printf("Name: %s\nAuthor: %s\nPublisher: %s\nBarcode: %s\n", new_name, new_author, new_publisher, new_barcode);
-    modify_book_attribute(&book1, "Les Misérables", "Victor Hugo", "Livre de Poche", "9782010008993");
+    modify_book_attribute(&book1, "Les Miserables", "Victor Hugo", "Livre de Poche", "9782010008993");
     display_book_info(book1);
     return 0;
 }
-
-
 
 
 //menu principal
