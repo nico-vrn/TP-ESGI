@@ -156,20 +156,22 @@ void get_book_attribute(Book book, char* name, char* author, char* publisher, ch
 }
 
 void display_book_info(Book book) {
-    printf("Name: %s\nAuthor: %s\nPublisher: %s\nBarcode: %s\n", book.name, book.author, book.publisher, book.barcode);
+    printf("--------------------\n");
+    printf(">Name: %s\n>Author: %s\n>Publisher: %s\n>Barcode: %s\n", book.name, book.author, book.publisher, book.barcode);
+    printf("--------------------\n\n");
 }
 
 int fct_book() {
     Book book1;
-    create_book(&book1, "The Catcher in the Rye", "J.D. Salinger", "Little, Brown and Company", "014862165X");
+    create_book(&book1, "Les Misérables", "Victor Hugo", "Folio", "9782070409235");
     display_book_info(book1);
     char new_name[30];
     char new_author[30];
     char new_publisher[30];
     char new_barcode[30];
     get_book_attribute(book1, new_name, new_author, new_publisher, new_barcode);
-    printf("Name: %s\nAuthor: %s\nPublisher: %s\nBarcode: %s\n", new_name, new_author, new_publisher, new_barcode);
-    modify_book_attribute(&book1, "The Catcher in the Rye - Edit", "J.D. Salinger", "Little, Brown and Company", "014862165X");
+    //printf("Name: %s\nAuthor: %s\nPublisher: %s\nBarcode: %s\n", new_name, new_author, new_publisher, new_barcode);
+    modify_book_attribute(&book1, "Les Misérables", "Victor Hugo", "Livre de Poche", "9782010008993");
     display_book_info(book1);
     return 0;
 }
