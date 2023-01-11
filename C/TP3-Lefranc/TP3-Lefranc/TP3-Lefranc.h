@@ -110,12 +110,44 @@ void set_value_double_array(PtrDoubleArray da, const unsigned idx, double val);
  */
 int C_2();
 
-void create_book(Book* book, char* name, char* author, char* publisher, char* barcode);
 /**
  * @brief Crée un livre
  * @param book pointeur sur le livre
  * @param name nom du livre
  * @param author auteur du livre
+ * @param publisher éditeur du livre
+ * @param barcode code barre du livre
+ */
+void create_book(Book* book, char* name, char* author, char* publisher, char* barcode);
+
+/**
+ * @brief Modifie un livre
+ * @param book pointeur sur le livre
+ * @param name nom du livre
+ * @param author auteur du livre
+ * @param publisher éditeur du livre
+ * @param barcode code barre du livre
+*/
+void modify_book_attribute(Book* book, char* name, char* author, char* publisher, char* barcode);
+
+void get_book_attribute(Book book, char* name, char* author, char* publisher, char* barcode);
+/**
+ * 
+*/
+
+/**
+ * @brief Affiche un livre
+ * @param book pointeur sur le livre
+ */
+void display_book_info(Book book);
+
+/**
+ * @brief Exemple d'utilisation des fonctions de livre
+*/
+int fct_book();
+
+int main();
+/**
  * 
 */
 
