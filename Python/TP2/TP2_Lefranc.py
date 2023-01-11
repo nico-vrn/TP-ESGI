@@ -11,13 +11,15 @@ def estunnombre(X):
 
 def surface_sous_courbe():
     print("Vous allez entrez 2 nombre réel et un nombre à virgule et je vais vous donner l'intégral de la fonction y=x*x")
-    a = input("Entrez A: ")
-    b = input("Entrez B: ")
-    p = input("Entrez P: ")
-    if estunnombre(a) and estunnombre(b) and estunnombre(p):
-        a = int(a)
-        b = int(b)
-        p = int(p)
+    while True:
+        a = input("Entrez A: ")
+        b = input("Entrez B: ")
+        p = input("Entrez P: ")
+        if estunnombre(a) and estunnombre(b) and estunnombre(p):
+            a = int(a)
+            b = int(b)
+            p = int(p)
+            break
     p=float(p)
     U0=int(a)*int(a)*p
     S=U0
