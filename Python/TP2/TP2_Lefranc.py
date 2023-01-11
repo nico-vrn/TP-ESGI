@@ -6,6 +6,54 @@ def estunnombre(X):
         print("Entrez un nombre entier comme indiqué") 
         return False
 
+def surface_sous_courbe():
+    print("Vous allez entrez 2 nombre réel et un nombre à virgule et je vais vous donner l'intégral de la fonction y=x*x")
+    a = input("Entrez A: ")
+    b = input("Entrez B: ")
+    p = input("Entrez P: ")
+    if estunnombre(a) and estunnombre(b) and estunnombre(p):
+        a = int(a)
+        b = int(b)
+        p = int(p)
+    p=float(p)
+    U0=int(a)*int(a)*p
+    S=U0
+    n=1
+    while(int(a)+p*int(n)<int(b)):
+        U0=(int(a)+p*n)*(int(a)+p*n)*p
+        S=S+U0
+        n=n+1
+    print("Calcul de l'intégrale de la fonction y=x*x avec ",a, "<= x <", b, " et p =", p)
+    print("La surface sous la courbe est de : ",S)
+
+def jeu_allumettes():
+    nom= input("Entrez votre nom : ")
+    print("Bienvenue ",nom," dans le jeu des allumettes")
+    print("Vous allez jouer contre l'ordinateur")
+    nb_allumettes= input("Choisir le nombre d'allumettes de départ:")
+    if estunnombre(nb_allumettes):
+        nb_allumettes=int(nb_allumettes)
+    while nb_allumettes>0:
+        print("Il reste ",nb_allumettes," allumettes")
+        nb_allumettes_joueur= input("Combien d'allumettes voulez-vous enlever ?")
+        if estunnombre(nb_allumettes_joueur):
+            nb_allumettes_joueur=int(nb_allumettes_joueur)
+        if nb_allumettes_joueur>3 or nb_allumettes_joueur<1:
+            print("Vous ne pouvez pas enlever plus de 3 allumettes ou moins d'une allumette")
+        else:
+            nb_allumettes=nb_allumettes-nb_allumettes_joueur
+            if nb_allumettes==0:
+                print("Vous avez perdu")
+                break
+            if nb_allumettes%4==0:
+                nb_allumettes_ordinateur=1
+            else:
+                nb_allumettes_ordinateur=4-(nb_allumettes%4)
+            print("L'ordinateur enlève ",nb_allumettes_ordinateur," allumettes")
+            nb_allumettes=nb_allumettes-nb_allumettes_ordinateur
+            if nb_allumettes==0:
+                print("Vous avez gagné")
+                break
 
 
 #menu
@@ -22,9 +70,9 @@ def menu() :
         if estunnombre(choix):
             choix=int(choix)
             if choix == 1:
-                print("hola")
+                surface_sous_courbe()
             elif choix == 2:
-                print("hola")
+                jeu_allumettes()
             elif choix == 3:
                 print("hola")
             elif choix == 4:
