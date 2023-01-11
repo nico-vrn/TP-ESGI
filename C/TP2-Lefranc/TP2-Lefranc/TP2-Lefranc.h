@@ -49,4 +49,9 @@ void lancer_des(int nb);
 */
 void jeu_des(nb_parties);
 
+/**
+ * @brief Sommaire
+*/
+int maint();
+
 #endif /* TP2-Lefranc.h */

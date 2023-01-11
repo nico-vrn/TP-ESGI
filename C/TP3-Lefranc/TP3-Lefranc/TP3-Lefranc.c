@@ -41,7 +41,7 @@ void TableauDouble_set(PtrTableauDouble dd, const unsigned taille, const unsigne
     }
 }
 
-int C_1() {
+void C_1() {
     PtrTableauDouble d1 = NULL;
     unsigned t1=5;
     TableauDouble_construire(&d1, t1);
@@ -54,7 +54,6 @@ int C_1() {
     TableauDouble_afficher(d1, t1);
     TableauDouble_liberer(&d1);
     TableauDouble_afficher(d1, t1);
-    return 0;
 }
 
 
@@ -175,7 +174,6 @@ int fct_book() {
     display_book_info(book1);
     return 0;
 }
-
 
 //menu principal
 int main()
