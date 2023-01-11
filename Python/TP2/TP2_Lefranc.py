@@ -1,4 +1,5 @@
 import random
+import tkinter as tk
 
 #fonction qui vérifie si un nombre donnée est bien un nombre et pas un caractère
 def estunnombre(X):
@@ -126,6 +127,74 @@ class Roman(Livre):
         if nb_pages:
             self.nb_pages=nb_pages
 
+
+# Initialisation de la liste des romans
+romans = []
+
+class AjoutRomanUI(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Ajouter un roman")
+        self.geometry("500x400")
+        
+        tk.Label(self, text="Nom: ").grid(row=0, column=0, padx=10, pady=10)
+        self.nom = tk.Entry(self)
+        self.nom.grid(row=0, column=1, padx=10, pady=10)
+        
+        tk.Label(self, text="Auteur: ").grid(row=1, column=0, padx=10, pady=10)
+        self.auteur = tk.Entry(self)
+        self.auteur.grid(row=1, column=1, padx=10, pady=10)
+        
+        tk.Label(self, text="Maison d'édition: ").grid(row=2, column=0, padx=10, pady=10)
+        self.maison_edition = tk.Entry(self)
+        self.maison_edition.grid(row=2, column=1, padx=10, pady=10)
+        
+        tk.Label(self, text="Code barre: ").grid(row=3, column=0, padx=10, pady=10)
+        self.code_barre = tk.Entry(self)
+        self.code_barre.grid(row=3, column=1, padx=10, pady=10)
+
+        self.code_barre.grid(row=3, column=1, padx=10, pady=10)
+
+        tk.Label(self, text="Type de roman: ").grid(row=4, column=0, padx=10, pady=10)
+        self.type_roman = tk.Entry(self)
+        self.type_roman.grid(row=4, column=1, padx=10, pady=10)
+
+        tk.Label(self, text="Nombre de page : ").grid(row=5, column=0, padx=10, pady=10)
+        self.desc_type_roman = tk.Entry(self)
+        self.desc_type_roman.grid(row=5, column=1, padx=10, pady=10)
+
+        tk.Button(self, text="Ajouter", command=self.ajouter_roman).grid(row=6, column=1, padx=10, pady=10)
+
+    def ajouter_roman(self):
+        nom = self.nom.get()
+        auteur = self.auteur.get()
+        maison_edition = self.maison_edition.get()
+        code_barre = self.code_barre.get()
+        type_roman = self.type_roman.get()
+        desc_type_roman = self.desc_type_roman.get()
+
+        # Création d'un nouvel objet Roman
+        roman = Roman(nom, auteur, maison_edition, code_barre, type_roman, desc_type_roman)
+
+        # Ajout de l'objet à la liste des romans
+        romans.append(roman)
+
+        #Affichage d'un message de confirmation
+        #tk.messagebox.showinfo("Info", "Roman ajouté avec succès!")
+        print("Roman ajouté avec succès!")
+
+        for roman in romans:
+            roman.afficher_livre()
+        
+        #Remise à vide des champs de saisie
+        self.nom.delete(0,tk.END)
+        self.auteur.delete(0,tk.END)
+        self.maison_edition.delete(0,tk.END)
+        self.code_barre.delete(0,tk.END)
+        self.type_roman.delete(0,tk.END)
+        self.desc_type_roman.delete(0,tk.END)
+
+
 #menu
 def menu() :
     while True:
@@ -158,7 +227,9 @@ def menu() :
                 print("\nLes modifications ont été effectuées :")
                 roman1.afficher_livre()
             elif choix == 6:
-                print("hola")
+                if __name__ == "__main__":
+                    ui = AjoutRomanUI()
+                    ui.mainloop()
             elif choix == 7:
                 print("Merci d'avoir participé, au revoir")
                 break
