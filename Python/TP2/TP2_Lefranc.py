@@ -109,33 +109,31 @@ class Livre:
     
 
 class Roman(Livre):
-    def __init__(self, titre, auteur, edition, barcode, genre, nb_pages):
+    def __init__(self, titre, auteur, edition, barcode, genre, synopsis):
         Livre.__init__(self, titre, auteur, edition, barcode)
         self.genre = genre
-        self.nb_pages = nb_pages
+        self.synopsis = synopsis
     
     def afficher_livre(self):
         Livre.afficher_livre(self)
         print("Genre : ", self.genre)
-        print("Nombre de pages : ", self.nb_pages)
+        print("Synopsis : ", self.synopsis)
         print("----------------")
 
-    def modifier_livre(self,titre=None, auteur=None, edition=None, barcode=None, genre=None, nb_pages=None):
+    def modifier_livre(self,titre=None, auteur=None, edition=None, barcode=None, genre=None, synopsis=None):
         Livre.modifier_livre(self,titre,auteur,edition,barcode)
         if genre:
             self.genre=genre
-        if nb_pages:
-            self.nb_pages=nb_pages
+        if synopsis:
+            self.synopsis=synopsis
 
 
-# Initialisation de la liste des romans
 romans = []
-
 class AjoutRomanUI(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Ajouter un roman")
-        self.geometry("500x400")
+        self.geometry("400x300")
         
         tk.Label(self, text="Nom: ").grid(row=0, column=0, padx=10, pady=10)
         self.nom = tk.Entry(self)
@@ -145,25 +143,26 @@ class AjoutRomanUI(tk.Tk):
         self.auteur = tk.Entry(self)
         self.auteur.grid(row=1, column=1, padx=10, pady=10)
         
-        tk.Label(self, text="Maison d'édition: ").grid(row=2, column=0, padx=10, pady=10)
+        tk.Label(self, text="Editeur : ").grid(row=2, column=0, padx=10, pady=10)
         self.maison_edition = tk.Entry(self)
         self.maison_edition.grid(row=2, column=1, padx=10, pady=10)
         
-        tk.Label(self, text="Code barre: ").grid(row=3, column=0, padx=10, pady=10)
+        tk.Label(self, text="Barcode : ").grid(row=3, column=0, padx=10, pady=10)
         self.code_barre = tk.Entry(self)
         self.code_barre.grid(row=3, column=1, padx=10, pady=10)
 
-        self.code_barre.grid(row=3, column=1, padx=10, pady=10)
+        tk.Label(self, text="Genre : ").grid(row=4, column=0, padx=10, pady=10)
+        self.type_roman = tk.StringVar(self)
+        self.type_roman.set("roman d'analyse") 
+        self.type_roman_menu = tk.OptionMenu(self, self.type_roman, "roman d'analyse", "roman d'aventures", "roman épistolaire", "roman autobiographique", "roman historique", "roman d'éducation", "roman réaliste", "roman naturaliste","roman de science-fiction", "roman policier", "roman noir","roman du terroir","roman fantastique","roman d'amour")
+        self.type_roman_menu.grid(row=4, column=1, padx=10, pady=10)
 
-        tk.Label(self, text="Type de roman: ").grid(row=4, column=0, padx=10, pady=10)
-        self.type_roman = tk.Entry(self)
-        self.type_roman.grid(row=4, column=1, padx=10, pady=10)
-
-        tk.Label(self, text="Nombre de page : ").grid(row=5, column=0, padx=10, pady=10)
-        self.desc_type_roman = tk.Entry(self)
-        self.desc_type_roman.grid(row=5, column=1, padx=10, pady=10)
+        tk.Label(self, text="Synopsis : ").grid(row=5, column=0, padx=10, pady=10)
+        self.synopsis = tk.Entry(self)
+        self.synopsis.grid(row=5, column=1, padx=10, pady=10)
 
         tk.Button(self, text="Ajouter", command=self.ajouter_roman).grid(row=6, column=1, padx=10, pady=10)
+        tk.Button(self, text="Fermer", command=self.destroy).grid(row=6, column=2, padx=10, pady=10)
 
     def ajouter_roman(self):
         nom = self.nom.get()
@@ -171,29 +170,22 @@ class AjoutRomanUI(tk.Tk):
         maison_edition = self.maison_edition.get()
         code_barre = self.code_barre.get()
         type_roman = self.type_roman.get()
-        desc_type_roman = self.desc_type_roman.get()
+        synopsis = self.synopsis.get()
 
-        # Création d'un nouvel objet Roman
-        roman = Roman(nom, auteur, maison_edition, code_barre, type_roman, desc_type_roman)
-
-        # Ajout de l'objet à la liste des romans
+        roman = Roman(nom, auteur, maison_edition, code_barre, type_roman, synopsis)
         romans.append(roman)
 
-        #Affichage d'un message de confirmation
         #tk.messagebox.showinfo("Info", "Roman ajouté avec succès!")
         print("Roman ajouté avec succès!")
 
         for roman in romans:
             roman.afficher_livre()
         
-        #Remise à vide des champs de saisie
         self.nom.delete(0,tk.END)
         self.auteur.delete(0,tk.END)
         self.maison_edition.delete(0,tk.END)
         self.code_barre.delete(0,tk.END)
-        self.type_roman.delete(0,tk.END)
-        self.desc_type_roman.delete(0,tk.END)
-
+        self.synopsis.delete(0,tk.END)
 
 #menu
 def menu() :
