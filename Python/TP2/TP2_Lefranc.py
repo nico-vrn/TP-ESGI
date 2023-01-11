@@ -107,6 +107,25 @@ class Livre:
             self.barcode=barcode
     
 
+class Roman(Livre):
+    def __init__(self, titre, auteur, edition, barcode, genre, nb_pages):
+        Livre.__init__(self, titre, auteur, edition, barcode)
+        self.genre = genre
+        self.nb_pages = nb_pages
+    
+    def afficher_livre(self):
+        Livre.afficher_livre(self)
+        print("Genre : ", self.genre)
+        print("Nombre de pages : ", self.nb_pages)
+        print("----------------")
+
+    def modifier_livre(self,titre=None, auteur=None, edition=None, barcode=None, genre=None, nb_pages=None):
+        Livre.modifier_livre(self,titre,auteur,edition,barcode)
+        if genre:
+            self.genre=genre
+        if nb_pages:
+            self.nb_pages=nb_pages
+
 #menu
 def menu() :
     while True:
@@ -133,7 +152,11 @@ def menu() :
                 print("\nLes modifications ont été effectuées :")
                 livre1.afficher_livre()
             elif choix == 5:
-                print("hola")
+                roman1 = Roman("Les Misérables", "Victor Hugo", "France Loisirs", "1234567890", "Roman historique", 1500)
+                roman1.afficher_livre()
+                roman1.modifier_livre(titre="Le Rouge et le Noir", auteur="Stendhal", edition="Gallimard", barcode="0987654321", genre="Roman réaliste", nb_pages=1000)
+                print("\nLes modifications ont été effectuées :")
+                roman1.afficher_livre()
             elif choix == 6:
                 print("hola")
             elif choix == 7:
