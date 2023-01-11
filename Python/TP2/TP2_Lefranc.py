@@ -32,6 +32,8 @@ def menu() :
             elif choix == 5:
                 print("hola")
             elif choix == 6:
+                print("hola")
+            elif choix == 7:
                 print("Merci d'avoir participé, au revoir")
                 break
             else:
