@@ -115,13 +115,6 @@ void C_2() {
 }
 
 
-typedef struct {
-    char* name;
-    char* author;
-    char* publisher;
-    char* barcode;
-} Book;
-
 void create_book(Book* book, char* name, char* author, char* publisher, char* barcode) {
     book->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
     strcpy(book->name, name);

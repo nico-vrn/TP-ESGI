@@ -83,11 +83,13 @@ void construct_double_array(PtrDoubleArray* da,unsigned sz);
  */
 void print_double_array(PtrDoubleArray da);
 
-void modify_double_array(PtrDoubleArray da, const unsigned idx, const double val);
 /**
  * @brief modify_double_array
- * 
+ * @param da : pointeur sur le tableau
+ * @param idx : index du tableau
+ * @param val : valeur à modifier
 */
+void modify_double_array(PtrDoubleArray da, const unsigned idx, const double val);
 
 /**
  * @brief free_double_array
@@ -115,5 +117,56 @@ void set_value_double_array(PtrDoubleArray da, const unsigned idx, double val);
  * @brief appel les fonctions
  */
 void C_2();
+
+
+typedef struct {
+    char* name;
+    char* author;
+    char* publisher;
+    char* barcode;
+} Book;
+
+/**
+ * @brief create_book
+ * @param book : pointeur sur le livre
+ * @param name : nom du livre
+ * @param author : auteur du livre
+ * @param publisher : éditeur du livre
+ * @param barcode : code barre du livre
+ */
+void create_book(Book* book, char* name, char* author, char* publisher, char* barcode);
+
+/**
+ * @brief modify_book_attribute
+ * @param book : pointeur sur le livre
+ * @param name : nom du livre
+ * @param author : auteur du livre
+ * @param publisher : éditeur du livre
+ * @param barcode : code barre du livre
+ */
+void modify_book_attribute(Book* book, char* name, char* author, char* publisher, char* barcode);
+
+/**
+ * @brief get_book_attribute
+ * @param book : pointeur sur le livre
+ * @param name : nom du livre
+ * @param author : auteur du livre
+ * @param publisher : éditeur du livre
+ * @param barcode : code barre du livre
+ */
+void get_book_attribute(Book book, char* name, char* author, char* publisher, char* barcode);
+
+/**
+ * @brief print_book
+ * @param book : pointeur sur le livre
+ */
+void display_book_info(Book book);
+
+/**
+ * @brief appel les fonctions
+ */
+int fct_book();
+
+
 
 #endif
