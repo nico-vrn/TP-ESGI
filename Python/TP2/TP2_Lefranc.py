@@ -81,6 +81,31 @@ def fichier():
         num2 = int(f.readline())
     print(f"Les entiers lus depuis le fichier BDD.txt sont {num1} et {num2}.")
 
+class Livre:
+    def __init__(self, titre, auteur, edition,barcode):
+        self.titre = titre
+        self.auteur = auteur
+        self.edition=edition
+        self.barcode=barcode
+
+    def afficher_livre(self):
+        print("\n----------------")
+        print("Nom : ", self.titre)
+        print("Auteur : ", self.auteur)
+        print("Editeur : ", self.edition)
+        print("Barcode : ", self.barcode)
+        print("----------------")
+    
+    def modifier_livre(self,titre=None, auteur=None, edition=None, barcode=None):
+        if titre:
+            self.titre=titre
+        if auteur:
+            self.auteur=auteur
+        if edition:
+            self.edition=edition
+        if barcode:
+            self.barcode=barcode
+    
 
 #menu
 def menu() :
@@ -102,7 +127,11 @@ def menu() :
             elif choix == 3:
                 fichier()
             elif choix == 4:
-                print("hola")
+                livre1 = Livre("Les Misérables", "Victor Hugo", "France Loisirs", "1234567890")
+                livre1.afficher_livre()
+                livre1.modifier_livre(titre="Le Rouge et le Noir", auteur="Stendhal", edition="Gallimard", barcode="0987654321")
+                print("\nLes modifications ont été effectuées :")
+                livre1.afficher_livre()
             elif choix == 5:
                 print("hola")
             elif choix == 6:
