@@ -15,12 +15,12 @@ def surface_sous_courbe():
         a = input("Entrez A: ")
         b = input("Entrez B: ")
         p = input("Entrez P: ")
-        if estunnombre(a) and estunnombre(b) and estunnombre(p):
+        if estunnombre(a) and estunnombre(b) and estunnombre(p.replace(".", "", 1)):
             a = int(a)
             b = int(b)
-            p = int(p)
+            p=float(p)
             break
-    p=float(p)
+    #print(p)
     U0=int(a)*int(a)*p
     S=U0
     n=1
