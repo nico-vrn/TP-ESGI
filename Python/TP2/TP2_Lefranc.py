@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+import json
 
 #fonction qui vérifie si un nombre donnée est bien un nombre et pas un caractère
 def estunnombre(X):
@@ -189,7 +190,7 @@ class AjoutRomanUI(tk.Tk):
 
         for roman in romans:
             roman.afficher_livre()
-        
+
         self.nom.delete(0,tk.END)
         self.auteur.delete(0,tk.END)
         self.maison_edition.delete(0,tk.END)
@@ -222,9 +223,9 @@ def menu() :
                 print("\nLes modifications ont été effectuées :")
                 livre1.afficher_livre()
             elif choix == 5:
-                roman1 = Roman("Les Misérables", "Victor Hugo", "France Loisirs", "1234567890", "Roman historique", 1500)
+                roman1 = Roman("Les Misérables", "Victor Hugo", "France Loisirs", "1234567890", "Roman historique", "blabla")
                 roman1.afficher_livre()
-                roman1.modifier_livre(titre="Le Rouge et le Noir", auteur="Stendhal", edition="Gallimard", barcode="0987654321", genre="Roman réaliste", nb_pages=1000)
+                roman1.modifier_livre(titre="Le Rouge et le Noir", auteur="Stendhal", edition="Gallimard", barcode="0987654321", genre="Roman réaliste", synopsis="blabla")
                 print("\nLes modifications ont été effectuées :")
                 roman1.afficher_livre()
             elif choix == 6:
