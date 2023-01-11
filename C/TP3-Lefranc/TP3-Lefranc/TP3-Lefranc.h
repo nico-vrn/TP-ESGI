@@ -94,7 +94,29 @@ void free_double_array(PtrDoubleArray* da);
  * @param idx index de l'élément à retourner
  * @return valeur de l'élément
  */
-double get_double_array(const PtrDoubleArray da, const unsigned idx);
+double get_value_double_array(const PtrDoubleArray da, const unsigned idx);
 
+/**
+ * @brief Modifie la valeur d'un élément du tableau de double
+ * @param da pointeur sur le tableau de double
+ * @param idx index de l'élément à modifier
+ * @param val valeur à affecter à l'élément
+ */
+void set_value_double_array(PtrDoubleArray da, const unsigned idx, double val);
+
+/**
+ * @brief Exemple d'utilisation des fonctions 
+ * @return 0
+ */
+int C_2();
+
+void create_book(Book* book, char* name, char* author, char* publisher, char* barcode);
+/**
+ * @brief Crée un livre
+ * @param book pointeur sur le livre
+ * @param name nom du livre
+ * @param author auteur du livre
+ * 
+*/
 
 #endif /* TP3-Lefranc.h */
