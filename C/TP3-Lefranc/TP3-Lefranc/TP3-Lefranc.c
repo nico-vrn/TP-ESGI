@@ -57,12 +57,6 @@ void C_1() {
 }
 
 
-typedef struct {
-    double* array;
-    unsigned int size;
-} DoubleArray;
-typedef DoubleArray* PtrDoubleArray;
-
 void construct_double_array(PtrDoubleArray* da,unsigned sz) {
     *da = (PtrDoubleArray) malloc(sizeof(DoubleArray));
     (*da)->array = (double*) calloc(sz, sizeof(double));
