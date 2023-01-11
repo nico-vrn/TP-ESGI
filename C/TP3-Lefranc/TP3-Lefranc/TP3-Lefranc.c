@@ -1,6 +1,4 @@
 #include "TP3-Lefranc.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 typedef double* PtrTableauDouble;
 
@@ -124,6 +122,59 @@ void C_2() {
 }
 
 
+typedef struct {
+    char* name;
+    char* author;
+    char* publisher;
+    char* barcode;
+} Book;
+
+void create_book(Book* book, char* name, char* author, char* publisher, char* barcode) {
+    book->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
+    strcpy(book->name, name);
+    book->author = (char*) malloc(sizeof(char) * (strlen(author) + 1));
+    strcpy(book->author, author);
+    book->publisher = (char*) malloc(sizeof(char) * (strlen(publisher) + 1));
+    strcpy(book->publisher, publisher);
+    book->barcode = (char*) malloc(sizeof(char) * (strlen(barcode) + 1));
+    strcpy(book->barcode, barcode);
+}
+
+void modify_book_attribute(Book* book, char* name, char* author, char* publisher, char* barcode) {
+    free(book->name);
+    free(book->author);
+    free(book->publisher);
+    free(book->barcode);
+    create_book(book, name, author, publisher, barcode);
+}
+
+void get_book_attribute(Book book, char* name, char* author, char* publisher, char* barcode) {
+    strcpy(name, book.name);
+    strcpy(author, book.author);
+    strcpy(publisher, book.publisher);
+    strcpy(barcode, book.barcode);
+}
+
+void display_book_info(Book book) {
+    printf("Name: %s\nAuthor: %s\nPublisher: %s\nBarcode: %s\n", book.name, book.author, book.publisher, book.barcode);
+}
+
+int fct_book() {
+    Book book1;
+    create_book(&book1, "The Catcher in the Rye", "J.D. Salinger", "Little, Brown and Company", "014862165X");
+    display_book_info(book1);
+    char new_name[30];
+    char new_author[30];
+    char new_publisher[30];
+    char new_barcode[30];
+    get_book_attribute(book1, new_name, new_author, new_publisher, new_barcode);
+    printf("Name: %s\nAuthor: %s\nPublisher: %s\nBarcode: %s\n", new_name, new_author, new_publisher, new_barcode);
+    modify_book_attribute(&book1, "The Catcher in the Rye - Edit", "J.D. Salinger", "Little, Brown and Company", "014862165X");
+    display_book_info(book1);
+    return 0;
+}
+
+
 
 
 //menu principal
@@ -147,7 +198,7 @@ int main()
             C_2();
 			break;
 		case 3:
-            //no
+            fct_book();
             break;
 		case 4:
 			printf("Au revoir \n");
