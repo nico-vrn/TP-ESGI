@@ -58,6 +58,29 @@ def jeu_allumettes():
                 print("Bravo",nom,"Vous avez gagné!!")
                 break
 
+def fichier():
+    num1=int(input("Entrez un nombre entier : "))
+    num2=int(input("Entrez un nombre entier : "))
+    with open ("BDD.bin","wb") as f:
+        f.write(num1.to_bytes(4, "big"))
+        f.write(num2.to_bytes(4, "big"))
+    print("\nLes entiers ont été écrits dans le fichier BDD.bin")
+
+    with open("BDD.txt", "w") as f:
+        f.write(str(num1) + "\n")
+        f.write(str(num2) + "\n")
+    print("Les entiers ont été écrits dans le fichier BDD.txt")
+
+    with open("BDD.bin", "rb") as f:
+        num1 = int.from_bytes(f.read(4), "big")
+        num2 = int.from_bytes(f.read(4), "big")
+    print(f"\nLes entiers lus depuis le fichier BDD.bin sont {num1} et {num2}.")
+
+    with open("BDD.txt", "r") as f:
+        num1 = int(f.readline())
+        num2 = int(f.readline())
+    print(f"Les entiers lus depuis le fichier BDD.txt sont {num1} et {num2}.")
+
 
 #menu
 def menu() :
@@ -77,7 +100,7 @@ def menu() :
             elif choix == 2:
                 jeu_allumettes()
             elif choix == 3:
-                print("hola")
+                fichier()
             elif choix == 4:
                 print("hola")
             elif choix == 5:
