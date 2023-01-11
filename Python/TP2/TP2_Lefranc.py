@@ -1,3 +1,5 @@
+import random
+
 #fonction qui vérifie si un nombre donnée est bien un nombre et pas un caractère
 def estunnombre(X):
     if X.isdigit():
@@ -31,11 +33,15 @@ def jeu_allumettes():
     print("Bienvenue ",nom," dans le jeu des allumettes")
     print("Vous allez jouer contre l'ordinateur")
     nb_allumettes= input("Choisir le nombre d'allumettes de départ:")
+    print("Vous allez pouvoir enlever 1,2 ou 3 allumettes")
     if estunnombre(nb_allumettes):
         nb_allumettes=int(nb_allumettes)
     while nb_allumettes>0:
-        print("Il reste ",nb_allumettes," allumettes")
-        nb_allumettes_joueur= input("Combien d'allumettes voulez-vous enlever ?")
+        print("\nIl reste ",nb_allumettes," allumettes")
+        #afficher les allumettes par des |
+        for i in range (nb_allumettes):
+            print("|",end="")
+        nb_allumettes_joueur= input("\nCombien d'allumettes voulez-vous enlever ?")
         if estunnombre(nb_allumettes_joueur):
             nb_allumettes_joueur=int(nb_allumettes_joueur)
         if nb_allumettes_joueur>3 or nb_allumettes_joueur<1:
@@ -43,16 +49,13 @@ def jeu_allumettes():
         else:
             nb_allumettes=nb_allumettes-nb_allumettes_joueur
             if nb_allumettes==0:
-                print("Vous avez perdu")
+                print("Vous avez perdu, l'ordinateur a gagné")
                 break
-            if nb_allumettes%4==0:
-                nb_allumettes_ordinateur=1
-            else:
-                nb_allumettes_ordinateur=4-(nb_allumettes%4)
+            nb_allumettes_ordinateur=random.randint(1,3)
             print("L'ordinateur enlève ",nb_allumettes_ordinateur," allumettes")
             nb_allumettes=nb_allumettes-nb_allumettes_ordinateur
-            if nb_allumettes==0:
-                print("Vous avez gagné")
+            if nb_allumettes<=0:
+                print("Bravo",nom,"Vous avez gagné!!")
                 break
 
 
