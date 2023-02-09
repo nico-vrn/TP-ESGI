@@ -15,13 +15,15 @@ def surface_sous_courbe():
     while True:
         a = input("Entrez A: ")
         b = input("Entrez B: ")
-        p = input("Entrez P: ")
+        p = input("Entrez P (nombre à virgule avec un . sous forme 0.1 ou 2.3): ")
         if estunnombre(a) and estunnombre(b) and estunnombre(p.replace(".", "", 1)):
             a = int(a)
             b = int(b)
             p=float(p)
             break
     #print(p)
+
+    #Solution 1 :
     U0=int(a)*int(a)*p
     S=U0
     n=1
@@ -29,6 +31,16 @@ def surface_sous_courbe():
         U0=(int(a)+p*n)*(int(a)+p*n)*p
         S=S+U0
         n=n+1
+    print("Solution 1 : La surface sous la courbe est de : ",S)
+
+    #Solution 2 :
+    S=0
+    L=int(a)
+    while(L<int(b)):
+        S=S+L*L*p
+        L=L+p
+    print("Solution 2 : La surface sous la courbe est de : ",S)
+
     print("Calcul de l'intégrale de la fonction y=x*x avec ",a, "<= x <", b, " et p =", p)
     print("La surface sous la courbe est de : ",S)
 
@@ -229,6 +241,7 @@ def menu() :
                 print("\nLes modifications ont été effectuées :")
                 roman1.afficher_livre()
             elif choix == 6:
+                print("Vérifier, une page s'est ouverte sur votre ordi.")
                 if __name__ == "__main__":
                     ui = AjoutRomanUI()
                     ui.mainloop()
