@@ -166,7 +166,6 @@ def menu() :
             if choix == 1:
                 exercice1()
             elif choix == 2:
-                print("Exercice 2 :")
                 exercice2()
             elif choix == 3:
                 exercice3()
