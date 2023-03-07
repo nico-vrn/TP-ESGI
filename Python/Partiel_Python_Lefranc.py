@@ -147,6 +147,7 @@ def exercice3():
 
     # Lecture du PC à partir du fichier
     pc2 = PC.lire('pc.txt')
+    print(pc2)
     print(pc2.ecran.taille_ecran)
     print(pc2.clavier.nb_touche)
     print("--------------------------------")
