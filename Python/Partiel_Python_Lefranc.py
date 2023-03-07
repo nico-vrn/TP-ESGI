@@ -57,22 +57,33 @@ class Materiel:
     def __init__(self, nom, nb_serie):
         self.nom = nom
         self.nb_serie = nb_serie
+    
+    def __str__(self):
+        return f"{self.nb_serie} ({self.nom})"
 
 class Clavier(Materiel):
     def __init__(self, nom, nb_serie, nb_touche):
         super().__init__(nom, nb_serie)
         self.nb_touche = nb_touche
+    
+    def __str__(self):
+        return f"Clavier {self.nb_serie} ({self.nom}) - Nombre de touches : {self.nb_touche}"
 
 class Ecran(Materiel):
     def __init__(self, nom, nb_serie, taille_ecran):
         super().__init__(nom, nb_serie)
         self.taille_ecran = taille_ecran
+    def __str__(self):
+        return f"Ecran {self.nb_serie} ({self.nom}) - Taille : {self.taille_ecran} pouces"
 
 class PC:
     def __init__(self, nb_serie, ecran, clavier):
         self.nb_serie = nb_serie
         self.ecran = ecran
         self.clavier = clavier
+    
+    def __str__(self):
+        return f"PC {self.nb_serie} - {self.ecran} - {self.clavier}"
     
     def sauvegarder(self, fichier):
         with open(fichier, 'w') as f:
@@ -90,26 +101,43 @@ class PC:
 
 def exercice3():
     print("Exercice 3 :")
+
+    # Création d'un matériel
+    print("--------Exemple Matériel--------")
     mat= Materiel("Materiel", "123456")
-    print(mat.nom)
+    print(mat)
+    print(mat.nb_serie, mat.nom)
+    print("--------------------------------")
+
     # Création d'un clavier
+    print("--------Exemple Clavier--------")
     clavier = Clavier('Clavier', '123456',108)
-    print(clavier.nb_touche)
+    print(clavier)
+    print(clavier.nb_serie, clavier.nom, clavier.nb_touche)
+    print("--------------------------------")
 
     # Création d'un écran
+    print("--------Exemple Ecran--------")
     ecran = Ecran('Ecran', '789012', 27)
-    print(ecran.nom)
+    print(ecran)
+    print(ecran.nb_serie, ecran.nom, ecran.taille_ecran)
+    print("--------------------------------")
 
     # Création d'un PC avec l'écran et le clavier
+    print("--------Exemple PC--------")
     pc = PC('345678', ecran, clavier)
+    print(pc)
+    print(pc.nb_serie, pc.ecran, pc.clavier)
+    print("--------------------------------")
 
     # Sauvegarde du PC dans un fichier
     pc.sauvegarder('pc.txt')
 
     # Lecture du PC à partir du fichier
     pc2 = PC.lire('pc.txt')
-    print(pc2.ecran.taille_ecran)    # affiche 27
-    print(pc2.clavier.nb_touche) # affiche 108
+    print(pc2.ecran.taille_ecran)
+    print(pc2.clavier.nb_touche)
+    print("--------------------------------")
 
 #menu
 def menu() :
