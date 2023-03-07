@@ -32,6 +32,27 @@ def exercice1():
     print("Le nombre de mois pour atteindre 1000 est de :", seuil(P, T))
 
 
+def suite(A, B, N):
+    U0 = A
+    U1 = B
+    Un=U1
+    Un_1=U0
+    for n in range(N):
+        Un_1=2/(1/Un_1+1/Un)
+        Un=(Un+Un_1)/2.0
+        n+=1
+        #print("a=",A, "b=",B, "n=",n, "=> suite = (",Un, " , ",Un_1, ")")
+    return Un, Un_1
+
+def exercice2():
+    print("Exercice 2 :")
+    A = entrez_nombre(texte="Entrez la valeur de A")
+    B = entrez_nombre(texte="Entrez la valeur de B")
+    N = entrez_nombre(texte="Entrez la valeur de N")
+    resultat = suite(A, B, N)
+    print("La suite final = ", resultat)
+
+
 class Materiel:
     def __init__(self, nom, nb_serie):
         self.nom = nom
@@ -105,6 +126,7 @@ def menu() :
                 exercice1()
             elif choix == 2:
                 print("Exercice 2 :")
+                exercice2()
             elif choix == 3:
                 exercice3()
             elif choix == 4:
