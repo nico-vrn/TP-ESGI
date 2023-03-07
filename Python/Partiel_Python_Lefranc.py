@@ -21,14 +21,26 @@ def seuil(P, T):
     while P < 1000:
         P *= T
         n += 1
-        print("|   ", round(P,2), "   |   ", T, "   |   ", n, "   |")
+        print("|    ",end="")
+        print(round(P,2), end="")
+        print("    |      ", end="")
+        print(n, end="")
+        print("      |",)
+        #print("|   ", round(P,2), "   |   ", T, "   |   ", n, "   |")
     return n-1
 
 def exercice1():
     print("Exercice 1 :")
     P = entrez_nombre("Entrez le prix initial de l'article")
-    T = float(input("Entrez le prix initial de l'article : "))
-    print("|      P      |      T      |      n      |")
+    while True:
+        T = input("Entrez taux (nombre à virgule avec un . sous forme 0.1 ou 2.3): ")
+        if estunnombre(T.replace(".", "", 1)):
+            T = float(T)
+            break
+        else:
+            print("Entrez un nombre décimal comme indiqué")
+            continue
+    print("|      P      |      N      |")
     print("Le nombre de mois pour atteindre 1000 est de :", seuil(P, T))
 
 
