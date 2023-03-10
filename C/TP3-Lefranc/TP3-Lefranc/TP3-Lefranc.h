@@ -168,5 +168,4 @@ void display_book_info(Book book);
 int fct_book();
 
 
-
 #endif
