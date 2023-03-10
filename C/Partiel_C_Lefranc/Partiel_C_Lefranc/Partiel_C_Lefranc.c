@@ -188,12 +188,13 @@ void liberer_Article(Article* article) {
 }
 
 void save_Article(const Article* article, const char* nomFichier) {
-    FILE* fichier = fopen(nomFichier, "a");
+    FILE* fichier = fopen(nomFichier, "w");
 
     if (fichier == NULL) {
         printf("Erreur d'ouverture du fichier.\n");
         return;
     }
+
     fprintf(fichier, "%s\n", article->a_nom);
     fprintf(fichier, "%.2f\n", article->a_prix);
     fprintf(fichier, "%s\n", article->a_description);
@@ -204,12 +205,19 @@ void save_Article(const Article* article, const char* nomFichier) {
 }
 
 void load_Article(Article* article, FILE* fichier) {
-    printf("\nChargement de l'article...");
-    fscanf(fichier, "%s", article->a_nom);
-    fscanf(fichier, "%f", &article->a_prix);
-    fscanf(fichier, "%s", article->a_description);
-    fscanf(fichier, "%d", &article->a_type);
+    printf("\nChargement de l'article...\n");
+
+    fgets(article->a_nom, sizeof(article->a_nom), fichier);
+    article->a_nom[strcspn(article->a_nom, "\n")] = '\0';
+
+    fscanf(fichier, "%f\n", &article->a_prix);
+
+    fgets(article->a_description, sizeof(article->a_description), fichier);
+    article->a_description[strcspn(article->a_description, "\n")] = '\0';
+
+    fscanf(fichier, "%d\n", &article->a_type);
 }
+
 
 #define NB_MAX_ARTICLES 1
 int main_Article() {
@@ -229,9 +237,11 @@ int main_Article() {
 
     FILE* fichier = fopen("Article.txt", "r");
     for (int i = 0; i < NB_MAX_ARTICLES; i++) {
+        tab_Article[i] = creer_Article();
         load_Article(tab_Article[i], fichier);
         afficher_Article(tab_Article[i]);
     }
+
 
     fclose(fichier);
 
