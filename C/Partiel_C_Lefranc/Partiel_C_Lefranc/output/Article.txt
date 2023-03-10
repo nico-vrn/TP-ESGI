@@ -1,0 +1,12 @@
+test
+5.00
+cosm
+0
+Test
+45.00
+roe
+0
+test
+0.00
+er
+0

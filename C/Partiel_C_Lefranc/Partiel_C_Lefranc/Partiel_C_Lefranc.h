@@ -17,3 +17,5 @@ typedef struct {
     char a_description[1024];
     Type a_type;
 } Article;
+
+#define NB_MAX_ARTICLES 1
