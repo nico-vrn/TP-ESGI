@@ -1,0 +1,17 @@
+Partie 1 : 
+1) Une structure de donnée est un moyen de stocker des données de manière organisée dans un ordinateur pour qu'elles puissent être utilisées efficacement. Cela permet de manipuler des données. Comme des tiroirs pour ranger différent type d'information.
+
+2) Une boucle en programmation permet d'exécruter une partie de code x fois déterminé à l'avance ou déterminé par le programme ou l'utilisateur. La différence entre la boucle for et la boucle wwhile est que déjà il ne faut pas utiliser la boucle while, ce n'est pas une bonne manière et la boucle for ou sait plus ou moins exactement combien de fois on veut que cela soit exécuté alors que la boucle while c'est en attendant quelque chose. Par exemple en attendant que l'utilisateur appuie sur ce bouton on fait ça alors que la for va être de faire x fois cet action. 
+
+3) Une fonction en programmation est une partie de code qui peut être utilisble plusieurs fois. Cela permet d'organiser son code et de ne pas le réecrire. On les utilises pour décomposer un programme en plusieurs bouts, faciliter la réutilisation de code et améliorer la lisibilité. Elle peuvents prendre des paramètres en entrée et peuvent retourner un résultat.
+
+4) La récursivité c'est quand une fonction s'appel elle-même. Par exemple pour calculé la suite de Fibonacci on peut faire une fonction 
+def fibonacci(n):
+  if n < 2:
+    return n
+  else:
+    return fibonacci(n-1) + fibonacci(n-2)
+
+5) l'héritage en programmation permet de créer une classe enfant qui hérite des propriétés des classes supérieur (parent).  Par exemple une classe voiture peut hériter d'une classe véhiculer et réutiliser ses attributs et méthode.
+
+Partie 2 en Python.
