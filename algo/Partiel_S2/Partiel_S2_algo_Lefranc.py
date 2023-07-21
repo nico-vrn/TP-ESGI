@@ -63,7 +63,7 @@ class Bibliotheque: # Classe principale
 
     def chercher_articles(self, titre_article): 
         # Recherche des articles correspondant au titre
-        articles_trouves = [article for article in self.articles if article.titre == titre_article]
+        articles_trouves = [article for article in self.articles if (article.titre == terme_de_recherche or hasattr(article, 'auteur') and article.auteur == terme_de_recherche)]
         if not articles_trouves: # Si aucun article n'est trouvé
             return "Aucun article trouvé."
         return articles_trouves
@@ -119,13 +119,13 @@ while True: # Menu
         print(bibliotheque.rendre_article(nom_utilisateur, titre_article))
 
     elif choix == 6: # Recherche d'un article
-        titre_article = input("Titre de l'article: ")
-        articles_trouves = bibliotheque.chercher_articles(titre_article)
-        if isinstance(articles_trouves, str): # Si aucun article n'est trouvé
-            print(articles_trouves)
-        else: # Affichage des articles trouvés
-            for article in articles_trouves:
-                print(f"\nTitre: {article.titre}, Numéro: {article.numero}, Emprunté: {'Oui' if article.emprunte else 'Non'}")
+            terme_de_recherche = input("Entrer le titre de l'article ou le nom de l'auteur: ")
+            articles_trouves = bibliotheque.chercher_articles(terme_de_recherche)
+            if isinstance(articles_trouves, str): # Si aucun article n'est trouvé
+                print(articles_trouves)
+            else: # Affichage des articles trouvés
+                for article in articles_trouves:
+                    print(f"\nTitre: {article.titre}, Numéro: {article.numero}, Emprunté: {'Oui' if article.emprunte else 'Non'}")
 
     elif choix == 7: # Affichage des articles empruntés par un utilisateur
         nom_utilisateur = input("Nom de l'utilisateur: ")
