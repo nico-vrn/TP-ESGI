@@ -3,13 +3,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # Informations de connexion
-email = "nlefranc@myges.fr"  # Assure-toi que c'est une adresse Outlook
+email = "email"  # Assure-toi que c'est une adresse Outlook
 password = "password"
 
 # Création du message
 msg = MIMEMultipart()
 msg['From'] = email
-msg['To'] = "nlefranc@myges.fr"
+msg['To'] = "email"
 msg['Subject'] = "Hello test"
 
 # Corps du message
