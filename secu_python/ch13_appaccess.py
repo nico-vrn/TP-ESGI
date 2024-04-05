@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 
 # Informations de connexion
 email = "nlefranc@myges.fr"  # Assure-toi que c'est une adresse Outlook
-password = "M&N14tmRct*ESGI"
+password = "password"
 
 # Création du message
 msg = MIMEMultipart()
