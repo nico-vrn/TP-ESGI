@@ -2,7 +2,7 @@ section .data
     filename db 'output.bin', 0  ; Nom du fichier à créer/écrire
 
 section .bss
-    fileDescriptor resb 1        ; Réserver un espace pour le descripteur de fichier
+    fileDescriptor resq 1        ; Réserver un espace pour le descripteur de fichier (suffisamment grand pour un descripteur de fichier sur x64)
 
 section .text
 global _start
@@ -28,7 +28,7 @@ xor_loop:
     ; Ouvrir/Créer le fichier
     mov rax, 2                   ; syscall pour sys_open
     mov rdi, filename            ; Premier argument: chemin du fichier
-    mov rsi, 0101h               ; Deuxième argument: flags (O_WRONLY | O_CREAT)
+    mov rsi, 0201h               ; Deuxième argument: flags (O_WRONLY | O_CREAT)
     mov rdx, 0644h               ; Troisième argument: mode (permissions)
     syscall
     mov [fileDescriptor], rax    ; Sauvegarder le descripteur de fichier
