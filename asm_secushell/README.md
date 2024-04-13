@@ -2,7 +2,7 @@
 
 <p>Ce repo est destiné à mon TP pour faire un hash md5 en asm.<br>
 
-2 manières de faire ont été exploré afin d'arriver à mes fins. </p>
+2 manières de faire ont été exploré afin d'arriver à mes fins </p>
 
 <h2 align="center">Les Dossiers<h2>
 
@@ -16,8 +16,10 @@ En revanche il ne fonctionne pas bien.
 Il affiche le contenu du fichier et un hash mais le hash est faux et je n'ai pas réussi à corriger le problème.
 
 ### Compilation 
-nasm -f elf64 MD5.s
+nasm -f elf64 MD5.s 
+
 ld -o MD5 MD5.o -lcrypto
+
 ./MD5
 
 ### Sortie
@@ -27,6 +29,7 @@ Hello, World!
 
 ### Erreur 
 Après vérification, le hash est censé être : bea8252ff4e80f41719ea13cdf007273
+
 Donc le fichier ne fonctionne pas.
 
 <br> <br>
@@ -44,7 +47,9 @@ Le fichier à hash est modifiable ligne 8 du fichier, par défaut c'est "fichier
 
 ### Compilation 
 gcc -c md5.c -o md5hash.o
+
 nasm -f elf64 -g md5c.asm -o assembleur.o
+
 gcc -o programme_final assembleur.o md5hash.o -lcrypto -nostartfiles -no-pie
 
 ### Sortie 
