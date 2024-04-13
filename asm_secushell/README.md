@@ -1,8 +1,8 @@
 <h1 align="center">TP ASSEMBLEUR MD5<h1>
 
-Ce repo est destiné à mon TP pour faire un hash md5 en asm.
+<p>Ce repo est destiné à mon TP pour faire un hash md5 en asm.<br>
 
-2 manières de faire ont été exploré afin d'arriver à mes fins. 
+2 manières de faire ont été exploré afin d'arriver à mes fins. </p>
 
 <h2 align="center">Les Dossiers<h2>
 
@@ -27,7 +27,9 @@ Hello, World!
 
 ### Erreur 
 Après vérification, le hash est censé être : bea8252ff4e80f41719ea13cdf007273
-Donc le fichier ne fonctionne pas. 
+Donc le fichier ne fonctionne pas.
+
+<br> <br>
 
 ## md5_asm_c
 Ce dossier contient 2 fichiers : 
