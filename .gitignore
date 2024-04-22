@@ -6,3 +6,26 @@
 
 # Ignore all .pdf files
 *.pdf
+
+# Fichiers compilés
+/target/
+
+# Supprimer les fichiers de configuration spécifiques à l'environnement
+**/*.rs.bk
+
+# Ignorer les fichiers de sauvegarde de l'éditeur vim
+**/*.swp
+**/*.swo
+
+# Ignorer les fichiers de sauvegarde des éditeurs de texte
+*.save
+*.swp
+*.swo
+*.bak
+
+# Fichiers de dépendances
+**/Cargo.lock
+
+# Fichiers de configuration spécifiques à Rust
+**/.env
+
