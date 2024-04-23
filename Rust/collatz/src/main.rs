@@ -15,5 +15,5 @@ fn print_collatz_sequence(mut n: i32) {
             3 * n + 1
         };
     }
-    println!("1"); // La séquence se termine toujours par 1
+    println!("1"); 
 }
