@@ -19,11 +19,8 @@ def is_valid_mac(mac):
 def change_mac(interface, new_mac):
     print(f"[+] Changing MAC address for {interface} to {new_mac}")
     
-    # Bring the interface down
     subprocess.call(["sudo", "ifconfig", interface, "down"])
-    # Change the MAC address
     subprocess.call(["sudo", "ifconfig", interface, "hw", "ether", new_mac])
-    # Bring the interface up
     subprocess.call(["sudo", "ifconfig", interface, "up"])
 
 def main():
@@ -35,7 +32,6 @@ def main():
     
     change_mac(interface, new_mac)
     
-    # Verify the MAC address has been changed
     ifconfig_result = subprocess.check_output(["ifconfig", interface])
     if new_mac in str(ifconfig_result):
         print(f"[+] MAC address was successfully changed to {new_mac} on {interface}")
