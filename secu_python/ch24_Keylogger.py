@@ -12,7 +12,6 @@ def on_press(key):
 
 def on_release(key):
     if key == keyboard.Key.esc:
-        # Stop listener
         return False
 
 def main():
