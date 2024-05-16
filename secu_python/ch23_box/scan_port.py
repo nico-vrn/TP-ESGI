@@ -14,7 +14,7 @@ def port_scan(target_ip):
                 print(f"Port: {port}\tState: {nm[host][proto][port]['state']}")
 
 def main():
-    target_ip = "192.168.56.103"
+    target_ip = "192.168.56.104"
     port_scan(target_ip)
 
 if __name__ == "__main__":
