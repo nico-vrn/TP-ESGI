@@ -2,7 +2,8 @@ import nmap
 
 def port_scan(target_ip):
     nm = nmap.PortScanner()
-    nm.scan(target_ip, '1-1024')
+    print(f"Scanning ports on {target_ip}...")
+    nm.scan(target_ip, '1-1024', '-T4')
     for host in nm.all_hosts():
         print(f"Host: {host} ({nm[host].hostname()})")
         print(f"State: {nm[host].state()}")
@@ -13,9 +14,7 @@ def port_scan(target_ip):
                 print(f"Port: {port}\tState: {nm[host][proto][port]['state']}")
 
 def main():
-    target_ip = "192.168.56.104"
-    print(f"Scanning ports on {target_ip}...")
-
+    target_ip = "192.168.56.103"
     port_scan(target_ip)
 
 if __name__ == "__main__":
