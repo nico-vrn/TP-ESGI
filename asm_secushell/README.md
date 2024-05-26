@@ -18,7 +18,7 @@ Il affiche le contenu du fichier et un hash mais le hash est faux et je n'ai pas
 ### Compilation 
 nasm -f elf64 MD5.s 
 
-ld -o MD5 MD5.o -lcrypto
+ld -o MD5 MD5.o -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 -lcrypto
 
 ./MD5
 
