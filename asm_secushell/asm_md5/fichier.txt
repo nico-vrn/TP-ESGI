@@ -1,1 +1,1 @@
-Hello, World!
+L'assembleur c'est l'enfer.
