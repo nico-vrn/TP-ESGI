@@ -2,9 +2,6 @@ from ping3 import ping
 import concurrent.futures
 
 def ping_ip(ip):
-    """
-    Ping une adresse IP pour vérifier si elle est active.
-    """
     try:
         response = ping(ip, timeout=1)
         if response:
@@ -14,9 +11,6 @@ def ping_ip(ip):
     return None
 
 def scan_network(base_ip, start, end):
-    """
-    Scanne les adresses IP dans la plage donnée.
-    """
     active_ips = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
         futures = {executor.submit(ping_ip, f"{base_ip}.{i}"): i for i in range(start, end + 1)}

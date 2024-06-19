@@ -12,13 +12,13 @@ def scan_ports(ip, start_port, end_port):
     return open_ports
 
 if __name__ == "__main__":
-    target_ip = input("Enter the IP address to scan: ")
-    start_port = int(input("Enter the starting port: "))
-    end_port = int(input("Enter the ending port: "))
+    target_ip = input("IP: ")
+    start_port = int(input("Port de départ: "))
+    end_port = int(input("last port: "))
 
     open_ports = scan_ports(target_ip, start_port, end_port)
 
     if open_ports:
-        print(f"Open ports on {target_ip}: {open_ports}")
+        print(f"Port ouvert sur {target_ip}: {open_ports}")
     else:
-        print(f"No open ports found on {target_ip}")
+        print(f"Pas de port ouvert sur {target_ip}")
