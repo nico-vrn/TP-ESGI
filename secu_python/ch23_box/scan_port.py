@@ -1,21 +1,24 @@
-import nmap
+import socket
 
-def port_scan(target_ip):
-    nm = nmap.PortScanner()
-    print(f"Scanning ports on {target_ip}...")
-    nm.scan(target_ip, '1-1024', '-T4')
-    for host in nm.all_hosts():
-        print(f"Host: {host} ({nm[host].hostname()})")
-        print(f"State: {nm[host].state()}")
-        for proto in nm[host].all_protocols():
-            print(f"Protocol: {proto}")
-            lport = nm[host][proto].keys()
-            for port in lport:
-                print(f"Port: {port}\tState: {nm[host][proto][port]['state']}")
-
-def main():
-    target_ip = "192.168.56.104"
-    port_scan(target_ip)
+def scan_ports(ip, start_port, end_port):
+    open_ports = []
+    for port in range(start_port, end_port + 1):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(1)
+        result = s.connect_ex((ip, port))
+        if result == 0:
+            open_ports.append(port)
+        s.close()
+    return open_ports
 
 if __name__ == "__main__":
-    main()
+    target_ip = input("Enter the IP address to scan: ")
+    start_port = int(input("Enter the starting port: "))
+    end_port = int(input("Enter the ending port: "))
+
+    open_ports = scan_ports(target_ip, start_port, end_port)
+
+    if open_ports:
+        print(f"Open ports on {target_ip}: {open_ports}")
+    else:
+        print(f"No open ports found on {target_ip}")
