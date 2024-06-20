@@ -35,7 +35,6 @@ def reverse_shell(ssh_client):
         if command.lower() in ['exit', 'quit']:
             print("Exiting reverse shell.")
             break
-        channel.send(command + '\n')
         while not channel.recv_ready():
             time.sleep(1)
         output = channel.recv(1024).decode('utf-8')
