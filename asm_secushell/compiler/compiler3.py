@@ -291,18 +291,20 @@ class Parser:
             return False
         return True
 
-# Semantic Analysis
 class SemanticAnalyzer:
     def __init__(self, ast):
         self.ast = ast
         self.symbol_table = {}
-    
+        self.function_prototypes = {}
+
     def analyze(self):
         for function in self.ast.functions:
             self.visit_function(function)
     
     def visit_function(self, function):
         self.symbol_table = {}
+        self.current_function = function
+        self.function_prototypes[function.name] = function.return_type
         for statement in function.body:
             self.visit_statement(statement)
     
@@ -329,10 +331,14 @@ class SemanticAnalyzer:
         self.visit_expression(declaration.initializer)
     
     def visit_return_statement(self, statement):
-        self.visit_expression(statement.expression)
+        return_type = self.visit_expression(statement.expression)
+        if return_type != self.current_function.return_type:
+            raise RuntimeError(f"Type mismatch in return statement: expected {self.current_function.return_type}, got {return_type}")
     
     def visit_if_statement(self, statement):
-        self.visit_expression(statement.condition)
+        condition_type = self.visit_expression(statement.condition)
+        if condition_type != 'int':
+            raise RuntimeError("Condition in if statement must be of type int")
         for stmt in statement.then_branch:
             self.visit_statement(stmt)
         if statement.else_branch:
@@ -340,32 +346,43 @@ class SemanticAnalyzer:
                 self.visit_statement(stmt)
     
     def visit_while_statement(self, statement):
-        self.visit_expression(statement.condition)
+        condition_type = self.visit_expression(statement.condition)
+        if condition_type != 'int':
+            raise RuntimeError("Condition in while statement must be of type int")
         for stmt in statement.body:
             self.visit_statement(stmt)
     
     def visit_for_statement(self, statement):
         self.visit_statement(statement.init)
-        self.visit_expression(statement.condition)
+        condition_type = self.visit_expression(statement.condition)
+        if condition_type != 'int':
+            raise RuntimeError("Condition in for statement must be of type int")
         self.visit_expression(statement.increment)
         for stmt in statement.body:
             self.visit_statement(stmt)
 
     def visit_function_call(self, call):
+        if call.name not in self.function_prototypes:
+            raise RuntimeError(f"Function '{call.name}' not declared")
         for arg in call.args:
             self.visit_expression(arg)
     
     def visit_expression(self, expression):
         if isinstance(expression, BinaryOperation):
-            self.visit_expression(expression.left)
-            self.visit_expression(expression.right)
+            left_type = self.visit_expression(expression.left)
+            right_type = self.visit_expression(expression.right)
+            if left_type != right_type:
+                raise RuntimeError("Type mismatch in binary operation")
+            return left_type
         elif isinstance(expression, Variable):
             if expression.name not in self.symbol_table:
                 raise RuntimeError(f"Variable '{expression.name}' not declared")
+            return self.symbol_table[expression.name]
         elif isinstance(expression, Number):
-            pass
+            return 'int'
         else:
             raise ValueError(f"Unknown expression type: {type(expression)}")
+
 
 # Intermediate Code Generation
 class IntermediateCodeGenerator:
