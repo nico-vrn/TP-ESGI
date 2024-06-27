@@ -47,6 +47,9 @@ class Preprocessor:
 class ASTNode:
     pass
 
+class Expression(ASTNode):
+    pass
+
 class Program(ASTNode):
     def __init__(self, functions):
         self.functions = functions
@@ -81,8 +84,17 @@ class WhileStatement(Statement):
         self.condition = condition
         self.body = body
 
-class Expression(ASTNode):
-    pass
+class ForStatement(Statement):
+    def __init__(self, init, condition, increment, body):
+        self.init = init
+        self.condition = condition
+        self.increment = increment
+        self.body = body
+
+class FunctionCall(Expression):
+    def __init__(self, name, args):
+        self.name = name
+        self.args = args
 
 class BinaryOperation(Expression):
     def __init__(self, left, operator, right):
@@ -98,22 +110,24 @@ class Number(Expression):
     def __init__(self, value):
         self.value = value
 
+
 # Lexical Analysis
 def tokenize(code):
     token_specification = [
-        ('KEYWORD',  r'\b(int|return|if|else|while)\b'), # Keywords
-        ('NUMBER',   r'\d+'),                            # Integer
-        ('ID',       r'[A-Za-z_]\w*'),                   # Identifiers
-        ('COMP_OP',  r'==|!=|<=|>=|<|>'),                # Comparison operators
-        ('ASSIGN',   r'='),                              # Assignment operator
-        ('OP',       r'[+\-*/]'),                        # Arithmetic operators
-        ('SEMI',     r';'),                              # Semicolon
-        ('LPAREN',   r'\('),                             # Left parenthesis
-        ('RPAREN',   r'\)'),                             # Right parenthesis
-        ('LBRACE',   r'\{'),                             # Left brace
-        ('RBRACE',   r'\}'),                             # Right brace
-        ('SKIP',     r'[ \t\n]+'),                       # Skip over spaces, tabs, and newlines
-        ('MISMATCH', r'.'),                              # Any other character
+        ('KEYWORD',  r'\b(int|return|if|else|while|for)\b'), # Keywords
+        ('NUMBER',   r'\d+'),                                # Integer
+        ('ID',       r'[A-Za-z_]\w*'),                       # Identifiers
+        ('COMP_OP',  r'==|!=|<=|>=|<|>'),                    # Comparison operators
+        ('ASSIGN',   r'='),                                  # Assignment operator
+        ('OP',       r'[+\-*/]'),                            # Arithmetic operators
+        ('SEMI',     r';'),                                  # Semicolon
+        ('LPAREN',   r'\('),                                 # Left parenthesis
+        ('RPAREN',   r'\)'),                                 # Right parenthesis
+        ('LBRACE',   r'\{'),                                 # Left brace
+        ('RBRACE',   r'\}'),                                 # Right brace
+        ('COMMA',    r','),                                  # Comma
+        ('SKIP',     r'[ \t\n]+'),                           # Skip over spaces, tabs, and newlines
+        ('MISMATCH', r'.'),                                  # Any other character
     ]
     
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -185,6 +199,10 @@ class Parser:
             return self.parse_if_statement()
         elif self.check('KEYWORD', 'while'):
             return self.parse_while_statement()
+        elif self.check('KEYWORD', 'for'):
+            return self.parse_for_statement()
+        elif self.check('ID') and self.check('LPAREN', 1):
+            return self.parse_function_call()
         else:
             raise SyntaxError(f'Unknown statement at position {self.pos}')
     
@@ -214,6 +232,32 @@ class Parser:
         self.consume('RBRACE')
         return WhileStatement(condition, body)
     
+    def parse_for_statement(self):
+        self.consume('KEYWORD', 'for')
+        self.consume('LPAREN')
+        init = self.parse_statement()
+        condition = self.parse_expression()
+        self.consume('SEMI')
+        increment = self.parse_expression()
+        self.consume('RPAREN')
+        self.consume('LBRACE')
+        body = self.parse_statements()
+        self.consume('RBRACE')
+        return ForStatement(init, condition, increment, body)
+
+    def parse_function_call(self):
+        name = self.consume('ID')
+        self.consume('LPAREN')
+        args = []
+        if not self.check('RPAREN'):
+            args.append(self.parse_expression())
+            while self.check('COMMA'):
+                self.consume('COMMA')
+                args.append(self.parse_expression())
+        self.consume('RPAREN')
+        self.consume('SEMI')
+        return FunctionCall(name, args)
+
     def parse_expression(self):
         left = self.parse_term()
         while self.check('OP') or self.check('COMP_OP'):
@@ -271,6 +315,10 @@ class SemanticAnalyzer:
             self.visit_if_statement(statement)
         elif isinstance(statement, WhileStatement):
             self.visit_while_statement(statement)
+        elif isinstance(statement, ForStatement):
+            self.visit_for_statement(statement)
+        elif isinstance(statement, FunctionCall):
+            self.visit_function_call(statement)
         else:
             raise ValueError(f"Unknown statement type: {type(statement)}")
     
@@ -295,6 +343,17 @@ class SemanticAnalyzer:
         self.visit_expression(statement.condition)
         for stmt in statement.body:
             self.visit_statement(stmt)
+    
+    def visit_for_statement(self, statement):
+        self.visit_statement(statement.init)
+        self.visit_expression(statement.condition)
+        self.visit_expression(statement.increment)
+        for stmt in statement.body:
+            self.visit_statement(stmt)
+
+    def visit_function_call(self, call):
+        for arg in call.args:
+            self.visit_expression(arg)
     
     def visit_expression(self, expression):
         if isinstance(expression, BinaryOperation):
@@ -333,6 +392,10 @@ class IntermediateCodeGenerator:
             self.visit_if_statement(statement)
         elif isinstance(statement, WhileStatement):
             self.visit_while_statement(statement)
+        elif isinstance(statement, ForStatement):
+            self.visit_for_statement(statement)
+        elif isinstance(statement, FunctionCall):
+            self.visit_function_call(statement)
         else:
             raise ValueError(f"Unknown statement type: {type(statement)}")
     
@@ -377,6 +440,28 @@ class IntermediateCodeGenerator:
         self.code.append(f"goto {start_label}")
         self.code.append(f"{end_label}:")
     
+    def visit_for_statement(self, statement):
+        self.visit_statement(statement.init)
+        start_label = f"L{self.new_temp()}"
+        self.code.append(f"{start_label}:")
+        condition_var = self.new_temp()
+        self.visit_expression(statement.condition, condition_var)
+        end_label = f"L{self.new_temp()}"
+        self.code.append(f"if not {condition_var} goto {end_label}")
+        for stmt in statement.body:
+            self.visit_statement(stmt)
+        self.visit_expression(statement.increment, None)
+        self.code.append(f"goto {start_label}")
+        self.code.append(f"{end_label}:")
+    
+    def visit_function_call(self, call):
+        temp_vars = []
+        for arg in call.args:
+            temp_var = self.new_temp()
+            self.visit_expression(arg, temp_var)
+            temp_vars.append(temp_var)
+        self.code.append(f"call {call.name}({', '.join(temp_vars)})")
+    
     def visit_expression(self, expression, target):
         if isinstance(expression, BinaryOperation):
             left_temp = self.new_temp()
@@ -418,6 +503,11 @@ class AssemblyCodeGenerator:
             self.assembly_code.append(f"JMP {parts[1]}")
         elif parts[0].startswith('L'):
             self.assembly_code.append(f"{parts[0]}:")
+        elif parts[0] == 'call':
+            args = parts[1][parts[1].index('(')+1:parts[1].index(')')].split(', ')
+            for i, arg in enumerate(args):
+                self.assembly_code.append(f"MOV R{i+1}, {arg}")
+            self.assembly_code.append(f"CALL {parts[1][:parts[1].index('(')]}")
         else:
             if '=' in parts:
                 target, expression = parts[0], parts[2:]
@@ -442,7 +532,6 @@ class AssemblyCodeGenerator:
             '==': 'JE',
             '!=': 'JNE'
         }[operator]
-
 
 # Example usage
 code = """
@@ -499,6 +588,17 @@ def print_ast(node, indent=0):
         print_ast(node.condition, indent + 2)
         print('  ' * (indent + 1) + 'do')
         print_ast(node.body, indent + 2)
+    elif isinstance(node, ForStatement):
+        print('  ' * (indent + 1) + 'for')
+        print_ast(node.init, indent + 2)
+        print_ast(node.condition, indent + 2)
+        print_ast(node.increment, indent + 2)
+        print('  ' * (indent + 1) + 'do')
+        print_ast(node.body, indent + 2)
+    elif isinstance(node, FunctionCall):
+        print('  ' * (indent + 1) + f'call {node.name}')
+        for arg in node.args:
+            print_ast(arg, indent + 2)
     elif isinstance(node, BinaryOperation):
         print_ast(node.left, indent + 1)
         print('  ' * (indent + 1) + node.operator)
