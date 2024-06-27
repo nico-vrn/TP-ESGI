@@ -1,5 +1,48 @@
 import re
 
+# Preprocessor
+class Preprocessor:
+    def __init__(self, code):
+        self.code = code
+        self.defines = {}
+        self.lines = self.code.splitlines()
+
+    def preprocess(self):
+        self.handle_defines()
+        self.handle_includes()
+        return "\n".join(self.lines)
+    
+    def handle_defines(self):
+        new_lines = []
+        for line in self.lines:
+            match = re.match(r'#define (\w+) (.+)', line)
+            if match:
+                name, value = match.groups()
+                self.defines[name] = value
+            else:
+                new_lines.append(self.replace_defines(line))
+        self.lines = new_lines
+
+    def replace_defines(self, line):
+        for name, value in self.defines.items():
+            line = line.replace(name, value)
+        return line
+    
+    def handle_includes(self):
+        new_lines = []
+        for line in self.lines:
+            match = re.match(r'#include "(.+)"', line)
+            if match:
+                filename = match.group(1)
+                with open(filename, 'r') as f:
+                    included_code = f.read()
+                preprocessor = Preprocessor(included_code)
+                included_lines = preprocessor.preprocess().splitlines()
+                new_lines.extend(included_lines)
+            else:
+                new_lines.append(line)
+        self.lines = new_lines
+
 # AST Node Classes
 class ASTNode:
     pass
@@ -295,13 +338,18 @@ class AssemblyCodeGenerator:
 
 # Example usage
 code = """
+#define VAL 5
+
 int main() {
-    int a = 5 + 3;
+    int a = VAL + 3;
     return a;
 }
 """
 
-tokens = tokenize(code)
+preprocessor = Preprocessor(code)
+preprocessed_code = preprocessor.preprocess()
+
+tokens = tokenize(preprocessed_code)
 parser = Parser(tokens)
 ast = parser.parse()
 semantic_analyzer = SemanticAnalyzer(ast)
