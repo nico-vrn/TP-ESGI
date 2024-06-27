@@ -258,6 +258,41 @@ class IntermediateCodeGenerator:
         self.temp_count += 1
         return f"t{self.temp_count}"
 
+# Assembly Code Generation
+class AssemblyCodeGenerator:
+    def __init__(self, intermediate_code):
+        self.intermediate_code = intermediate_code
+        self.assembly_code = []
+    
+    def generate(self):
+        for line in self.intermediate_code:
+            self.generate_line(line)
+        return self.assembly_code
+    
+    def generate_line(self, line):
+        parts = line.split()
+        if parts[0] == 'return':
+            self.assembly_code.append(f"MOV R0, {parts[1]}")
+            self.assembly_code.append("RET")
+        else:
+            if '=' in parts:
+                target, expression = parts[0], parts[2:]
+                if len(expression) == 1:
+                    self.assembly_code.append(f"MOV {target}, {expression[0]}")
+                else:
+                    left, operator, right = expression
+                    self.assembly_code.append(f"MOV R1, {left}")
+                    self.assembly_code.append(f"{self.translate_operator(operator)} R1, {right}")
+                    self.assembly_code.append(f"MOV {target}, R1")
+    
+    def translate_operator(self, operator):
+        return {
+            '+': 'ADD',
+            '-': 'SUB',
+            '*': 'MUL',
+            '/': 'DIV'
+        }[operator]
+
 # Example usage
 code = """
 int main() {
@@ -273,6 +308,8 @@ semantic_analyzer = SemanticAnalyzer(ast)
 semantic_analyzer.analyze()
 intermediate_code_generator = IntermediateCodeGenerator(ast)
 intermediate_code = intermediate_code_generator.generate()
+assembly_code_generator = AssemblyCodeGenerator(intermediate_code)
+assembly_code = assembly_code_generator.generate()
 
 def print_ast(node, indent=0):
     print('  ' * indent + str(node))
@@ -303,4 +340,9 @@ print_ast(ast)
 # Print the intermediate code
 print("\nIntermediate Code:")
 for line in intermediate_code:
+    print(line)
+
+# Print the assembly code
+print("\nAssembly Code:")
+for line in assembly_code:
     print(line)
