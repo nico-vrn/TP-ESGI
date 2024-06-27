@@ -61,7 +61,6 @@ def tokenize(code):
     tokens.append(('EOF', 'EOF'))  # Add EOF token at the end
     return tokens
 
-
 # Analyse syntaxique
 class Parser:
     def __init__(self, tokens):
@@ -73,7 +72,8 @@ class Parser:
 
     def program(self):
         functions = []
-        while self.current < len(self.tokens):
+        while not self.is_at_end():
+            print(f"Current token: {self.tokens[self.current]}")
             if self.match('KEYWORD', 'int') and self.look_ahead('ID') and self.look_ahead('LPAREN', 2):
                 functions.append(self.function())
             else:
@@ -81,6 +81,7 @@ class Parser:
         return {'type': 'Program', 'functions': functions}
 
     def function(self):
+        print("Parsing function")
         return_type = self.consume('KEYWORD')
         name = self.consume('ID')
         self.consume('LPAREN')
@@ -89,6 +90,7 @@ class Parser:
         return {'type': 'Function', 'return_type': return_type, 'name': name, 'body': body}
 
     def block(self):
+        print("Parsing block")
         statements = []
         self.consume('LBRACE')
         while not self.check('RBRACE'):
@@ -105,6 +107,7 @@ class Parser:
             return self.expression_statement()
 
     def var_declaration(self):
+        print("Parsing variable declaration")
         self.consume('KEYWORD', 'int')
         name = self.consume('ID')
         self.consume('OP', '=')
@@ -113,12 +116,14 @@ class Parser:
         return {'type': 'VarDeclaration', 'name': name, 'value': value}
 
     def return_statement(self):
+        print("Parsing return statement")
         self.consume('KEYWORD', 'return')
         value = self.expression()
         self.consume('SEMI')
         return {'type': 'ReturnStatement', 'value': value}
 
     def expression_statement(self):
+        print("Parsing expression statement")
         expr = self.expression()
         self.consume('SEMI')
         return {'type': 'ExpressionStatement', 'expression': expr}
@@ -183,25 +188,27 @@ class Parser:
         raise Exception(f"Expected {t} {value}, got {self.tokens[self.current]}")
 
     def skip_declaration(self):
+        print("Skipping declaration")
+        nest_level = 0
         while not self.is_at_end():
-            if self.check('SEMI'):
+            print(f"Skip declaration token: {self.tokens[self.current]}")
+            if self.check('SEMI') and nest_level == 0:
                 self.advance()
                 return
             elif self.check('LBRACE'):
-                self.advance()
-                while not self.check('RBRACE') and not self.is_at_end():
+                nest_level += 1
+            elif self.check('RBRACE'):
+                if nest_level == 0:
                     self.advance()
-                self.advance()
-                return
-            else:
-                self.advance()
+                    return
+                nest_level -= 1
+            self.advance()
+        print("End of skip_declaration reached")
 
     def look_ahead(self, token_type, offset=1):
         if self.current + offset < len(self.tokens):
             return self.tokens[self.current + offset][0] == token_type
         return False
-
-
 
 # Analyse sémantique
 class SemanticAnalyzer:
@@ -357,63 +364,70 @@ class ELFGenerator:
 
     def generate(self, output_file):
         elf = ELF(e_machine=EM.EM_386)
-        code_section = elf.append_section('.text', b'\x90' * len(self.assembly))
+        # Convert assembly to binary
+        binary_code = self.assemble(self.assembly)
+        
+        # Vérification du type de binary_code
+        if not isinstance(binary_code, bytes):
+            raise TypeError("binary_code should be of type bytes")
+
+        code_section = elf.append_section('.text', 0x08048000, binary_code)  # Add address 0x08048000
         code_section.header.sh_flags = 0x6  # Allocatable and Executable
         elf.append_section('.shstrtab', b'\x00.text\x00.shstrtab\x00')
         elf.write(output_file)
 
+    def assemble(self, assembly):
+        # This is a placeholder function, in a real compiler this should convert assembly to binary
+        binary = b""
+        for line in assembly:
+            # A real assembler would convert each line to machine code
+            # For now, we'll just append a NOP (0x90) for each line for simplicity
+            binary += b'\x90'
+        return binary
+
 # Fonction principale de compilation
 def compile_c(input_file, output_file):
-    # Preprocessing
-    preprocessor = Preprocessor(input_file)
-    preprocessed_code = preprocessor.preprocess()
+    try:
+        # Preprocessing
+        preprocessor = Preprocessor(input_file)
+        preprocessed_code = preprocessor.preprocess()
 
-    # Afficher le code préprocessé pour le débogage
-    print("Preprocessed Code:\n", preprocessed_code)
+        # Afficher le code préprocessé pour le débogage
+        print("Preprocessed Code:\n", preprocessed_code)
 
-    # Lexical analysis
-    tokens = tokenize(preprocessed_code)
-    
-    # Afficher les tokens pour le débogage
-    print("Tokens:\n", tokens)
+        # Lexical analysis
+        tokens = tokenize(preprocessed_code)
+        
+        # Afficher les tokens pour le débogage
+        print("Tokens:\n", tokens)
 
-    # Parsing
-    parser = Parser(tokens)
-    ast = parser.parse()
+        # Parsing
+        parser = Parser(tokens)
+        ast = parser.parse()
 
-    # Semantic analysis
-    semantic_analyzer = SemanticAnalyzer(ast)
-    semantic_analyzer.analyze()
+        # Semantic analysis
+        semantic_analyzer = SemanticAnalyzer(ast)
+        semantic_analyzer.analyze()
 
-    # Intermediate code generation
-    icg = IntermediateCodeGenerator(ast)
-    intermediate_code = icg.generate()
+        # Intermediate code generation
+        icg = IntermediateCodeGenerator(ast)
+        intermediate_code = icg.generate()
 
-    # Optimization
-    optimizer = Optimizer(intermediate_code)
-    optimized_code = optimizer.optimize()
+        # Optimization
+        optimizer = Optimizer(intermediate_code)
+        optimized_code = optimizer.optimize()
 
-    # Assembly code generation
-    assembly_generator = AssemblyGenerator(optimized_code)
-    assembly_code = assembly_generator.generate()
+        # Assembly code generation
+        assembly_generator = AssemblyGenerator(optimized_code)
+        assembly_code = assembly_generator.generate()
 
-    # ELF file generation
-    elf_generator = ELFGenerator(assembly_code)
-    elf_generator.generate(output_file)
+        # ELF file generation
+        elf_generator = ELFGenerator(assembly_code)
+        elf_generator.generate(output_file)
 
-    print(f"Compilation successful. Output file: {output_file}")
-
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python compiler.py <input_file.c> <output_file>")
-        sys.exit(1)
-
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
-
-    compile_c(input_file, output_file)
-
-
+        print(f"Compilation successful. Output file: {output_file}")
+    except Exception as e:
+        print(f"An error occurred during compilation: {e}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
