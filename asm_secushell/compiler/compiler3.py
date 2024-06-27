@@ -1,4 +1,177 @@
 import re
+from elftools.elf.elffile import ELFFile
+from elftools.elf.sections import SymbolTableSection
+from elftools.elf.segments import Segment
+from elftools.elf.enums import ENUM_E_MACHINE
+import sys
+import os
+from pcpp import Preprocessor
+
+
+class ELFWriter:
+    def __init__(self, code, filename="output"):
+        self.code = code
+        self.filename = filename
+        self.temp_var_map = {}
+        self.next_reg = 0
+
+    def write(self):
+        with open(self.filename, "wb") as f:
+            code_section = self.create_code_section()
+            string_table = self.create_string_table()
+            
+            # Calculate offsets
+            code_offset = 52 + 32  # ELF header + Program header
+            string_table_offset = code_offset + len(code_section)
+            section_header_offset = string_table_offset + len(string_table)
+            
+            # Create headers
+            elf_header = self.create_elf_header(section_header_offset)
+            program_header = self.create_program_header(len(code_section))
+            section_header_table = self.create_section_header_table(len(code_section), code_offset, string_table_offset)
+            
+            # Write to file
+            f.write(elf_header)
+            f.write(program_header)
+            f.write(code_section)
+            f.write(string_table)
+            f.write(section_header_table)
+
+    def create_elf_header(self, section_header_offset):
+        elf_header = bytearray([0x7f, ord('E'), ord('L'), ord('F'), 0x01, 0x01, 0x01, 0x00])
+        elf_header += bytearray([0x00] * 8)
+        elf_header += (2).to_bytes(2, byteorder='little')  # ET_EXEC
+        elf_header += (3).to_bytes(2, byteorder='little')  # EM_386
+        elf_header += (1).to_bytes(4, byteorder='little')  # EV_CURRENT
+        elf_header += (0x08048000).to_bytes(4, byteorder='little')  # Entry point address
+        elf_header += (52).to_bytes(4, byteorder='little')  # Program header table offset
+        elf_header += section_header_offset.to_bytes(4, byteorder='little')  # Section header table offset
+        elf_header += (0).to_bytes(4, byteorder='little')  # Flags
+        elf_header += (52).to_bytes(2, byteorder='little')  # ELF header size
+        elf_header += (32).to_bytes(2, byteorder='little')  # Program header size
+        elf_header += (1).to_bytes(2, byteorder='little')  # Number of program headers
+        elf_header += (40).to_bytes(2, byteorder='little')  # Section header size
+        elf_header += (3).to_bytes(2, byteorder='little')  # Number of section headers
+        elf_header += (2).to_bytes(2, byteorder='little')  # Section header string table index
+        return elf_header
+
+    def create_program_header(self, code_size):
+        program_header = bytearray()
+        program_header += (1).to_bytes(4, byteorder='little')  # PT_LOAD
+        program_header += (52 + 32).to_bytes(4, byteorder='little')  # Offset
+        program_header += (0x08048000).to_bytes(4, byteorder='little')  # Virtual address
+        program_header += (0x08048000).to_bytes(4, byteorder='little')  # Physical address
+        program_header += code_size.to_bytes(4, byteorder='little')  # File size
+        program_header += code_size.to_bytes(4, byteorder='little')  # Memory size
+        program_header += (5).to_bytes(4, byteorder='little')  # Flags (R, X)
+        program_header += (0x1000).to_bytes(4, byteorder='little')  # Align
+        return program_header
+
+    def create_code_section(self):
+        machine_code = bytearray()
+        for line in self.code:
+            parts = line.split()
+            if parts[0] == "MOV":
+                reg = self.get_register(parts[1].rstrip(','))
+                val = self.value_to_byte(parts[2])
+                machine_code.append(0xb8 + reg)  # MOV opcode with register
+                machine_code.append(val)
+            elif parts[0] == "ADD":
+                reg = self.get_register(parts[1].rstrip(','))
+                val = self.value_to_byte(parts[2])
+                machine_code.append(0x04 + reg)  # ADD opcode with register
+                machine_code.append(val)
+            elif parts[0] == "RET":
+                machine_code.append(0xc3)  # RET opcode
+            elif parts[0] == "PUSH":
+                reg = self.get_register(parts[1])
+                machine_code.append(0x50 + reg)  # PUSH opcode with register
+            elif parts[0] == "POP":
+                reg = self.get_register(parts[1])
+                machine_code.append(0x58 + reg)  # POP opcode with register
+            elif parts[0] == "CALL":
+                machine_code.append(0xe8)  # CALL opcode (simplified, no actual address handling)
+                machine_code.append(0x00)  # Placeholder for the address
+            elif parts[0] == "CMP":
+                reg = self.get_register(parts[1].rstrip(','))
+                val = self.value_to_byte(parts[2])
+                machine_code.append(0x3d + reg)  # CMP opcode with register
+                machine_code.append(val)
+            elif parts[0] == "JNE":
+                machine_code.append(0x75)  # JNE opcode
+                machine_code.append(0x00)  # Placeholder for the jump offset
+            elif parts[0] == "JG":
+                machine_code.append(0x7f)  # JG opcode
+                machine_code.append(0x00)  # Placeholder for the jump offset
+            elif parts[0] == "JL":
+                machine_code.append(0x7c)  # JL opcode
+                machine_code.append(0x00)  # Placeholder for the jump offset
+            elif parts[0] == "JMP":
+                machine_code.append(0xeb)  # JMP opcode
+                machine_code.append(0x00)  # Placeholder for the jump offset
+        return machine_code
+
+    def create_section_header_table(self, code_size, code_offset, string_table_offset):
+        section_headers = bytearray()
+        
+        # Null section header
+        section_headers += (0).to_bytes(40, byteorder='little')
+        
+        # Code section header
+        section_headers += (1).to_bytes(4, byteorder='little')  # sh_name
+        section_headers += (1).to_bytes(4, byteorder='little')  # sh_type (SHT_PROGBITS)
+        section_headers += (6).to_bytes(4, byteorder='little')  # sh_flags (SHF_ALLOC | SHF_EXECINSTR)
+        section_headers += (0x08048000).to_bytes(4, byteorder='little')  # sh_addr
+        section_headers += code_offset.to_bytes(4, byteorder='little')  # sh_offset
+        section_headers += code_size.to_bytes(4, byteorder='little')  # sh_size
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_link
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_info
+        section_headers += (4).to_bytes(4, byteorder='little')  # sh_addralign
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_entsize
+        
+        # String table section header
+        section_headers += (7).to_bytes(4, byteorder='little')  # sh_name
+        section_headers += (3).to_bytes(4, byteorder='little')  # sh_type (SHT_STRTAB)
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_flags
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_addr
+        section_headers += string_table_offset.to_bytes(4, byteorder='little')  # sh_offset
+        section_headers += (17).to_bytes(4, byteorder='little')  # sh_size (size of string table)
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_link
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_info
+        section_headers += (1).to_bytes(4, byteorder='little')  # sh_addralign
+        section_headers += (0).to_bytes(4, byteorder='little')  # sh_entsize
+        
+        return section_headers
+
+    def create_string_table(self):
+        return b'\0.text\0.shstrtab\0'
+
+    def get_register(self, name):
+        if name in self.temp_var_map:
+            return self.temp_var_map[name]
+        reg = self.next_reg
+        self.temp_var_map[name] = reg
+        self.next_reg += 1
+        return reg
+
+    def value_to_byte(self, val):
+        try:
+            return int(val)
+        except ValueError:
+            return 0  # Simplified error handling, should be improved
+
+class CPreprocessor:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def preprocess(self):
+        pp = Preprocessor()
+        pp.add_path(os.path.dirname(self.filename))
+        with open(self.filename, 'r') as f:
+            pp.parse(f.read())
+        
+        output = pp.output()
+        return output
 
 # Preprocessor
 class Preprocessor:
@@ -627,6 +800,10 @@ optimized_intermediate_code = optimizer.optimize()
 
 assembly_code_generator = AssemblyCodeGenerator(optimized_intermediate_code)
 assembly_code = assembly_code_generator.generate()
+
+# Write to ELF file
+elf_writer = ELFWriter(assembly_code, "output")
+elf_writer.write()
 
 def print_ast(node, indent=0):
     print('  ' * indent + str(node))
