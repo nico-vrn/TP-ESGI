@@ -523,8 +523,10 @@ class AssemblyCodeGenerator:
         elif parts[0] == 'call':
             args = parts[1][parts[1].index('(')+1:parts[1].index(')')].split(', ')
             for i, arg in enumerate(args):
-                self.assembly_code.append(f"MOV R{i+1}, {arg}")
+                self.assembly_code.append(f"PUSH {arg}")
             self.assembly_code.append(f"CALL {parts[1][:parts[1].index('(')]}")
+            for _ in args:
+                self.assembly_code.append("POP R0")  # Adjust as needed
         else:
             if '=' in parts:
                 target, expression = parts[0], parts[2:]
@@ -549,6 +551,7 @@ class AssemblyCodeGenerator:
             '==': 'JE',
             '!=': 'JNE'
         }[operator]
+
     
 class IntermediateCodeOptimizer:
     def __init__(self, code):
