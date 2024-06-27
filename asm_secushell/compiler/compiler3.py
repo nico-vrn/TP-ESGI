@@ -162,6 +162,50 @@ class Parser:
             return False
         return True
 
+# Semantic Analysis
+class SemanticAnalyzer:
+    def __init__(self, ast):
+        self.ast = ast
+        self.symbol_table = {}
+    
+    def analyze(self):
+        for function in self.ast.functions:
+            self.visit_function(function)
+    
+    def visit_function(self, function):
+        self.symbol_table = {}
+        for statement in function.body:
+            self.visit_statement(statement)
+    
+    def visit_statement(self, statement):
+        if isinstance(statement, VariableDeclaration):
+            self.visit_variable_declaration(statement)
+        elif isinstance(statement, ReturnStatement):
+            self.visit_return_statement(statement)
+        else:
+            raise ValueError(f"Unknown statement type: {type(statement)}")
+    
+    def visit_variable_declaration(self, declaration):
+        if declaration.var_name in self.symbol_table:
+            raise RuntimeError(f"Variable '{declaration.var_name}' already declared")
+        self.symbol_table[declaration.var_name] = declaration.var_type
+        self.visit_expression(declaration.initializer)
+    
+    def visit_return_statement(self, statement):
+        self.visit_expression(statement.expression)
+    
+    def visit_expression(self, expression):
+        if isinstance(expression, BinaryOperation):
+            self.visit_expression(expression.left)
+            self.visit_expression(expression.right)
+        elif isinstance(expression, Variable):
+            if expression.name not in self.symbol_table:
+                raise RuntimeError(f"Variable '{expression.name}' not declared")
+        elif isinstance(expression, Number):
+            pass
+        else:
+            raise ValueError(f"Unknown expression type: {type(expression)}")
+
 # Example usage
 code = """
 int main() {
@@ -173,6 +217,8 @@ int main() {
 tokens = tokenize(code)
 parser = Parser(tokens)
 ast = parser.parse()
+semantic_analyzer = SemanticAnalyzer(ast)
+semantic_analyzer.analyze()
 
 def print_ast(node, indent=0):
     print('  ' * indent + str(node))
