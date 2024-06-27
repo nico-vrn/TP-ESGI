@@ -206,6 +206,58 @@ class SemanticAnalyzer:
         else:
             raise ValueError(f"Unknown expression type: {type(expression)}")
 
+# Intermediate Code Generation
+class IntermediateCodeGenerator:
+    def __init__(self, ast):
+        self.ast = ast
+        self.code = []
+        self.temp_count = 0
+    
+    def generate(self):
+        for function in self.ast.functions:
+            self.visit_function(function)
+        return self.code
+    
+    def visit_function(self, function):
+        for statement in function.body:
+            self.visit_statement(statement)
+    
+    def visit_statement(self, statement):
+        if isinstance(statement, VariableDeclaration):
+            self.visit_variable_declaration(statement)
+        elif isinstance(statement, ReturnStatement):
+            self.visit_return_statement(statement)
+        else:
+            raise ValueError(f"Unknown statement type: {type(statement)}")
+    
+    def visit_variable_declaration(self, declaration):
+        temp_var = self.new_temp()
+        self.visit_expression(declaration.initializer, temp_var)
+        self.code.append(f"{declaration.var_name} = {temp_var}")
+    
+    def visit_return_statement(self, statement):
+        temp_var = self.new_temp()
+        self.visit_expression(statement.expression, temp_var)
+        self.code.append(f"return {temp_var}")
+    
+    def visit_expression(self, expression, target):
+        if isinstance(expression, BinaryOperation):
+            left_temp = self.new_temp()
+            right_temp = self.new_temp()
+            self.visit_expression(expression.left, left_temp)
+            self.visit_expression(expression.right, right_temp)
+            self.code.append(f"{target} = {left_temp} {expression.operator} {right_temp}")
+        elif isinstance(expression, Variable):
+            self.code.append(f"{target} = {expression.name}")
+        elif isinstance(expression, Number):
+            self.code.append(f"{target} = {expression.value}")
+        else:
+            raise ValueError(f"Unknown expression type: {type(expression)}")
+    
+    def new_temp(self):
+        self.temp_count += 1
+        return f"t{self.temp_count}"
+
 # Example usage
 code = """
 int main() {
@@ -219,6 +271,8 @@ parser = Parser(tokens)
 ast = parser.parse()
 semantic_analyzer = SemanticAnalyzer(ast)
 semantic_analyzer.analyze()
+intermediate_code_generator = IntermediateCodeGenerator(ast)
+intermediate_code = intermediate_code_generator.generate()
 
 def print_ast(node, indent=0):
     print('  ' * indent + str(node))
@@ -245,3 +299,8 @@ def print_ast(node, indent=0):
         print('  ' * (indent + 1) + str(node.value))
 
 print_ast(ast)
+
+# Print the intermediate code
+print("\nIntermediate Code:")
+for line in intermediate_code:
+    print(line)
