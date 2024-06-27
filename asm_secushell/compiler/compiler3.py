@@ -549,6 +549,49 @@ class AssemblyCodeGenerator:
             '==': 'JE',
             '!=': 'JNE'
         }[operator]
+    
+class IntermediateCodeOptimizer:
+    def __init__(self, code):
+        self.code = code
+        self.optimized_code = []
+
+    def optimize(self):
+        self.optimized_code = self.eliminate_common_subexpressions(self.code)
+        self.optimized_code = self.constant_propagation(self.optimized_code)
+        # Add more optimization methods as needed
+        return self.optimized_code
+
+    def eliminate_common_subexpressions(self, code):
+        expr_map = {}
+        optimized_code = []
+        for line in code:
+            parts = line.split()
+            if len(parts) == 5 and parts[1] == '=' and parts[3] in ['+', '-', '*', '/']:
+                expr = ' '.join(parts[2:])
+                if expr in expr_map:
+                    optimized_code.append(f"{parts[0]} = {expr_map[expr]}")
+                else:
+                    expr_map[expr] = parts[0]
+                    optimized_code.append(line)
+            else:
+                optimized_code.append(line)
+        return optimized_code
+
+    def constant_propagation(self, code):
+        const_map = {}
+        optimized_code = []
+        for line in code:
+            parts = line.split()
+            if len(parts) == 3 and parts[1] == '=' and parts[2].isdigit():
+                const_map[parts[0]] = parts[2]
+                optimized_code.append(line)
+            else:
+                for i, part in enumerate(parts):
+                    if part in const_map:
+                        parts[i] = const_map[part]
+                optimized_code.append(' '.join(parts))
+        return optimized_code
+
 
 # Example usage
 code = """
@@ -574,7 +617,12 @@ semantic_analyzer = SemanticAnalyzer(ast)
 semantic_analyzer.analyze()
 intermediate_code_generator = IntermediateCodeGenerator(ast)
 intermediate_code = intermediate_code_generator.generate()
-assembly_code_generator = AssemblyCodeGenerator(intermediate_code)
+
+# Optimization step
+optimizer = IntermediateCodeOptimizer(intermediate_code)
+optimized_intermediate_code = optimizer.optimize()
+
+assembly_code_generator = AssemblyCodeGenerator(optimized_intermediate_code)
 assembly_code = assembly_code_generator.generate()
 
 def print_ast(node, indent=0):
@@ -630,6 +678,11 @@ print_ast(ast)
 # Print the intermediate code
 print("\nIntermediate Code:")
 for line in intermediate_code:
+    print(line)
+
+# Print the optimized intermediate code
+print("\nOptimized Intermediate Code:")
+for line in optimized_intermediate_code:
     print(line)
 
 # Print the assembly code
