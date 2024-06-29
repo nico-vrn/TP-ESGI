@@ -119,14 +119,14 @@ class SimpleCCompiler:
         preprocessed_code = self.preprocess(source_file)
 
         # Diagnostic: Sauvegarder le code préprocessé pour inspection
-        with open("preprocessed_debug.c", "w") as f:
-            f.write(preprocessed_code)
+        #with open("preprocessed_debug.c", "w") as f:
+         #   f.write(preprocessed_code)
 
-        print("Preprocessed Code:\n", preprocessed_code)  # Ajouter pour diagnostiquer
+        #print("Preprocessed Code:\n", preprocessed_code)  # Ajouter pour diagnostiquer
 
         cleaned_code = self.clean_preprocessed_code(preprocessed_code)
 
-        print("Cleaned Preprocessed Code:\n", cleaned_code)  # Ajouter pour diagnostiquer
+        #print("Cleaned Preprocessed Code:\n", cleaned_code)  # Ajouter pour diagnostiquer
 
         llvm_ir = self.generate_llvm_ir(cleaned_code)
 
