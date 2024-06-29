@@ -73,7 +73,6 @@ class Parser:
     def program(self):
         functions = []
         while not self.is_at_end():
-            print(f"Current token: {self.tokens[self.current]}")
             if self.match('KEYWORD', 'int') and self.look_ahead('ID') and self.look_ahead('LPAREN', 2):
                 functions.append(self.function())
             else:
@@ -81,7 +80,6 @@ class Parser:
         return {'type': 'Program', 'functions': functions}
 
     def function(self):
-        print("Parsing function")
         return_type = self.consume('KEYWORD')
         name = self.consume('ID')
         self.consume('LPAREN')
@@ -90,7 +88,6 @@ class Parser:
         return {'type': 'Function', 'return_type': return_type, 'name': name, 'body': body}
 
     def block(self):
-        print("Parsing block")
         statements = []
         self.consume('LBRACE')
         while not self.check('RBRACE'):
@@ -107,7 +104,6 @@ class Parser:
             return self.expression_statement()
 
     def var_declaration(self):
-        print("Parsing variable declaration")
         self.consume('KEYWORD', 'int')
         name = self.consume('ID')
         self.consume('OP', '=')
@@ -116,14 +112,12 @@ class Parser:
         return {'type': 'VarDeclaration', 'name': name, 'value': value}
 
     def return_statement(self):
-        print("Parsing return statement")
         self.consume('KEYWORD', 'return')
         value = self.expression()
         self.consume('SEMI')
         return {'type': 'ReturnStatement', 'value': value}
 
     def expression_statement(self):
-        print("Parsing expression statement")
         expr = self.expression()
         self.consume('SEMI')
         return {'type': 'ExpressionStatement', 'expression': expr}
@@ -188,10 +182,8 @@ class Parser:
         raise Exception(f"Expected {t} {value}, got {self.tokens[self.current]}")
 
     def skip_declaration(self):
-        print("Skipping declaration")
         nest_level = 0
         while not self.is_at_end():
-            print(f"Skip declaration token: {self.tokens[self.current]}")
             if self.check('SEMI') and nest_level == 0:
                 self.advance()
                 return
@@ -203,7 +195,6 @@ class Parser:
                     return
                 nest_level -= 1
             self.advance()
-        print("End of skip_declaration reached")
 
     def look_ahead(self, token_type, offset=1):
         if self.current + offset < len(self.tokens):
@@ -268,6 +259,7 @@ class IntermediateCodeGenerator:
         self.ast = ast
         self.code = []
         self.temp_counter = 0
+        self.current_temp = None
 
     def generate(self):
         self.visit(self.ast)
@@ -297,33 +289,31 @@ class IntermediateCodeGenerator:
         self.code.append("END_FUNCTION")
 
     def visit_VarDeclaration(self, node):
-        temp = self.new_temp()
         self.visit(node['value'])
-        self.code.append(f"{node['name']} = {temp}")
+        self.code.append(f"{node['name']} = {self.current_temp}")
 
     def visit_ReturnStatement(self, node):
-        temp = self.new_temp()
         self.visit(node['value'])
-        self.code.append(f"RETURN {temp}")
+        self.code.append(f"RETURN {self.current_temp}")
 
     def visit_ExpressionStatement(self, node):
-        temp = self.new_temp()
         self.visit(node['expression'])
 
     def visit_BinaryOp(self, node):
-        left = self.new_temp()
-        right = self.new_temp()
         self.visit(node['left'])
+        left_temp = self.current_temp
         self.visit(node['right'])
-        self.code.append(f"{left} = {node['left']['value']}")
-        self.code.append(f"{right} = {node['right']['value']}")
-        self.code.append(f"{self.new_temp()} = {left} {node['operator']} {right}")
+        right_temp = self.current_temp
+        self.current_temp = self.new_temp()
+        self.code.append(f"{self.current_temp} = {left_temp} {node['operator']} {right_temp}")
 
     def visit_Number(self, node):
-        self.code.append(f"{self.new_temp()} = {node['value']}")
+        self.current_temp = self.new_temp()
+        self.code.append(f"{self.current_temp} = {node['value']}")
 
     def visit_Variable(self, node):
-        self.code.append(f"{self.new_temp()} = {node['name']}")
+        self.current_temp = self.new_temp()
+        self.code.append(f"{self.current_temp} = {node['name']}")
 
     def new_temp(self):
         self.temp_counter += 1
@@ -438,3 +428,4 @@ if __name__ == "__main__":
     output_file = sys.argv[2]
 
     compile_c(input_file, output_file)
+
