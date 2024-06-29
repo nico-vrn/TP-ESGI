@@ -1,9 +1,12 @@
 import os
 import sys
+import io
+import re
 import subprocess
 import llvmlite.binding as llvm
 import llvmlite.ir as ir
-from pycparser import c_parser, c_ast, parse_file
+from pcpp import Preprocessor as PCPPPreprocessor
+from pycparser import c_parser, c_ast
 
 class SimpleCCompiler:
     def __init__(self):
@@ -36,28 +39,44 @@ class SimpleCCompiler:
             f.write(target_machine.emit_object(llvm_module))
 
     def preprocess(self, source_file):
-        preprocessed_file = "preprocessed.c"
+        pp = PCPPPreprocessor()
+        pp.add_path(os.path.dirname(source_file))
+        pp.add_path("headers")  # Add your headers folder path
+        
         with open(source_file, 'r') as f:
-            code = f.read()
+            content = f.read()
+        
+        output = io.StringIO()
+        pp.parse(content)
+        pp.write(output)
+        preprocessed_code = output.getvalue()
 
         # Inclure les définitions minimales pour pycparser
         fake_libc_definitions = '''
-        typedef __builtin_va_list va_list;
-        typedef __builtin_va_list __gnuc_va_list;
+        typedef int va_list;
+        typedef int FILE;
+        typedef int size_t;
+        typedef int fpos_t;
         #define NULL ((void*)0)
         int printf(const char *, ...);
+        int fprintf(FILE *, const char *, ...);
         '''
 
-        code = fake_libc_definitions + code
+        return fake_libc_definitions + preprocessed_code
 
-        with open(preprocessed_file, 'w') as f:
-            f.write(code)
-        
-        return preprocessed_file
+    def clean_preprocessed_code(self, preprocessed_code):
+        # Supprimer les directives de préprocesseur
+        cleaned_code = re.sub(r'#.*', '', preprocessed_code)
+        # Supprimer les commentaires
+        cleaned_code = re.sub(r'/\*.*?\*/', '', cleaned_code, flags=re.DOTALL)
+        cleaned_code = re.sub(r'//.*', '', cleaned_code)
+        # Supprimer les lignes vides
+        cleaned_code = os.linesep.join([s for s in cleaned_code.splitlines() if s.strip()])
+        return cleaned_code
 
-    def generate_llvm_ir(self, source_file):
+    def generate_llvm_ir(self, preprocessed_code):
         parser = c_parser.CParser()
-        ast = parse_file(source_file, use_cpp=True, cpp_args=['-E', r'-Iutils/fake_libc_include'])
+        ast = parser.parse(preprocessed_code)
 
         self.printf = ir.Function(self.module, ir.FunctionType(ir.IntType(32), [ir.PointerType(ir.IntType(8))], var_arg=True), name="printf")
 
@@ -95,8 +114,19 @@ class SimpleCCompiler:
             builder.call(self.printf, [arg])
 
     def compile(self, source_file):
-        preprocessed_file = self.preprocess(source_file)
-        llvm_ir = self.generate_llvm_ir(preprocessed_file)
+        preprocessed_code = self.preprocess(source_file)
+
+        # Diagnostic: Sauvegarder le code préprocessé pour inspection
+        with open("preprocessed_debug.c", "w") as f:
+            f.write(preprocessed_code)
+
+        print("Preprocessed Code:\n", preprocessed_code)  # Ajouter pour diagnostiquer
+
+        cleaned_code = self.clean_preprocessed_code(preprocessed_code)
+
+        print("Cleaned Preprocessed Code:\n", cleaned_code)  # Ajouter pour diagnostiquer
+
+        llvm_ir = self.generate_llvm_ir(cleaned_code)
 
         llvm_module = self.compile_ir(llvm_ir)
         obj_file = "output.o"
@@ -105,8 +135,6 @@ class SimpleCCompiler:
         subprocess.run(["gcc", "-static", "-o", "output", obj_file], check=True)
         
         print(f"Compilation réussie. Exécutable créé: output")
-        
-        os.remove(preprocessed_file)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
