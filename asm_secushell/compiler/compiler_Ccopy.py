@@ -13,6 +13,7 @@ class SimpleCCompiler:
         self.module = ir.Module(name="simple_module")
         self.engine = self.create_execution_engine()
         self.printf = None
+        self.string_count = 0
 
     def create_execution_engine(self):
         llvm.initialize()
@@ -102,7 +103,8 @@ class SimpleCCompiler:
     def visit_Constant(self, node, builder):
         if node.type == 'string':
             c_str_val = bytearray(node.value[1:-1] + '\0', 'utf8')
-            c_str = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(c_str_val)), name="str")
+            c_str = ir.GlobalVariable(self.module, ir.ArrayType(ir.IntType(8), len(c_str_val)), name=f"str_{self.string_count}")
+            self.string_count += 1
             c_str.initializer = ir.Constant(ir.ArrayType(ir.IntType(8), len(c_str_val)), c_str_val)
             c_str.linkage = 'internal'
             ptr = builder.gep(c_str, [ir.IntType(32)(0), ir.IntType(32)(0)])
