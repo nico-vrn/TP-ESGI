@@ -64,7 +64,8 @@ Le fichier "compilerC2" compile correctement les fichier "hello_world.c" et "fib
 ### Fichier CompilerC3
 Usage: python compiler.py <input_file.c> <output_file>
 
-Le fichier "compilerC3.py", effectue toutes les étapes de compilation sans utiliser de compilateur externe. En revanche celui-ci ne goncionne pas. 
+C'est le seul fichier à ne pas utiliser de compilateur externe.
+Le fichier "compilerC3.py", effectue toutes les étapes de compilation sans utiliser de compilateur externe. En revanche celui-ci ne fonctionne pas. 
 
 #### Sortie :
 Il y a de la gestion des erreurs afin d'essayer de déboguer, en revanche je n'ai pas réussi. 
