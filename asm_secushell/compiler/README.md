@@ -1,11 +1,9 @@
 <h1 align="center">TP Compileur C<h1>
 
 <p>Ce repo est destiné à mon TP pour faire un compilateur de fichier C en Python.<br>
-
-3 manières de faire ont été exploré afin d'arriver à mes fins <br>
 </p>
 
-<h2 align="center">Les Dossiers<h2>
+3 manières de faire ont été exploré afin d'arriver à mes fins
 
 ## Pré-requis
 ### Dépendances Python 
@@ -21,7 +19,7 @@ Vous pouvez installer les packages Python nécessaires en utilisant pip :
 pip install llvmlite pcpp pycparser
 ```
 ### Pré-requis système 
-Pour certains des fichiers il faut utiliser "gcc. Assurez-vous que gcc est installé sur votre système. Vous pouvez vérifier cela en exécutant gcc --version dans votre terminal. Si ce n'est pas installé, vous pouvez l'installer en utilisant le gestionnaire de packages de votre système (par exemple, apt pour Ubuntu/Debian, brew pour macOS).
+Pour certains des fichiers il faut utiliser le compilateur "gcc". Assurez-vous que gcc est installé sur votre système. Vous pouvez vérifier cela en exécutant gcc --version dans votre terminal. Si ce n'est pas installé, vous pouvez l'installer en utilisant le gestionnaire de packages de votre système (par exemple, apt pour Ubuntu/Debian, brew pour macOS).
 
 ## Instalation 
 1. Clonez le dépôt.
