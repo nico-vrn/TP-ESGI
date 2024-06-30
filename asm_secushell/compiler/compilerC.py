@@ -140,7 +140,7 @@ class SimpleCCompiler:
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print("Usage: python compiler_C.py <fichier.c>")
+        print("Usage: python compilerC.py <fichier.c>")
         sys.exit(1)
 
     source_file = sys.argv[1]

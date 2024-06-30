@@ -37,7 +37,6 @@ class SimpleCCompiler:
         with open(source_file, 'r') as f:
             code = f.read()
         
-        # Ajouter l'inclusion de stdio.h si elle n'est pas présente
         if '#include <stdio.h>' not in code:
             code = '#include <stdio.h>\n' + code
 
