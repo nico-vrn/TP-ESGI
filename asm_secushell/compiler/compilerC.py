@@ -42,7 +42,7 @@ class SimpleCCompiler:
     def preprocess(self, source_file):
         pp = PCPPPreprocessor()
         pp.add_path(os.path.dirname(source_file))
-        pp.add_path("headers")  # Add your headers folder path
+        pp.add_path("headers") 
         
         with open(source_file, 'r') as f:
             content = f.read()
