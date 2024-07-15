@@ -1,5 +1,22 @@
 import os
 import hashlib
+import sqlite3
+import datetime
+
+DATABASE = '../siem_logs.db'
+
+# Fonction pour écrire les logs dans la base de données SQLite
+def log_to_db(source, message):
+    timestamp = datetime.datetime.now().isoformat()
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO logs (timestamp, source, message) VALUES (?, ?, ?)",
+                       (timestamp, source, message))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Erreur lors de l'écriture du log dans la DB: {e}")
 
 def hash_file(filepath):
     """
@@ -29,7 +46,9 @@ def lister_fichiers(repertoire):
             filepath = os.path.join(root, file)
             file_size = os.path.getsize(filepath)
             file_hash = hash_file(filepath)
-            print(f"Fichier: {filepath}, Taille: {file_size} octets, Hash MD5: {file_hash}")
+            message = f"Fichier: {filepath}, Taille: {file_size} octets, Hash MD5: {file_hash}"
+            print(message)
+            log_to_db("Gestion des Fichiers", message)
 
 if __name__ == "__main__":
     # Demander à l'utilisateur d'entrer le répertoire à analyser

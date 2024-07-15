@@ -1,9 +1,22 @@
-from loguru import logger
 import re
 import os
+import sqlite3
+import datetime
 
-# Configuration de loguru pour enregistrer les événements dans un fichier log
-logger.add("analyse_forensique.log", format="{time} {level} {message}", level="INFO")
+DATABASE = '../siem_logs.db'
+
+# Fonction pour écrire les logs dans la base de données SQLite
+def log_to_db(source, message):
+    timestamp = datetime.datetime.now().isoformat()
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO logs (timestamp, source, message) VALUES (?, ?, ?)",
+                       (timestamp, source, message))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Erreur lors de l'écriture du log dans la DB: {e}")
 
 def analyser_journaux(fichier_journal):
     """
@@ -28,7 +41,9 @@ def analyser_journaux(fichier_journal):
     for ligne in lignes:
         for attaque, pattern in patterns.items():
             if pattern.search(ligne):
-                logger.info(f"Attaque détectée ({attaque}): {ligne.strip()}")
+                message = f"Attaque détectée ({attaque}): {ligne.strip()}"
+                print(message)
+                log_to_db("Analyse Forensique", message)
 
 if __name__ == "__main__":
     # Demander à l'utilisateur d'entrer le chemin du fichier journal à analyser

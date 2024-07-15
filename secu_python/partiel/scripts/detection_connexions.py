@@ -1,10 +1,22 @@
 import psutil
-from loguru import logger
+import sqlite3
 import time
+import datetime
 
-# Configuration de loguru pour enregistrer les événements dans un fichier log et dans la console
-logger.add("connexions_suspectes.log", format="{time} {level} {message}", level="INFO")
-logger.add(lambda msg: print(msg, end=""), format="{time} {level} {message}", level="INFO")
+DATABASE = '../siem_logs.db'
+
+# Fonction pour écrire les logs dans la base de données SQLite
+def log_to_db(source, message):
+    timestamp = datetime.datetime.now().isoformat()
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO logs (timestamp, source, message) VALUES (?, ?, ?)",
+                       (timestamp, source, message))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Erreur lors de l'écriture du log dans la DB: {e}")
 
 def detecter_connexions_suspectes():
     """
@@ -22,7 +34,9 @@ def detecter_connexions_suspectes():
         for conn in connexions:
             if conn.laddr.port in ports_sensibles and conn.status == 'LISTEN':
                 # Enregistrer les informations sur la connexion suspecte
-                logger.info(f"Connexion suspecte détectée: {conn}")
+                message = f"Connexion suspecte détectée: {conn}"
+                print(message)
+                log_to_db("Détection des Attaques", message)
         
         # Attendre 5 secondes avant de vérifier à nouveau
         time.sleep(5)

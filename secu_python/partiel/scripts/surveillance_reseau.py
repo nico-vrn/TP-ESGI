@@ -1,6 +1,23 @@
 import socket
 import struct
 import textwrap
+import sqlite3
+import datetime
+
+DATABASE = '../siem_logs.db'
+
+# Fonction pour écrire les logs dans la base de données SQLite
+def log_to_db(source, message):
+    timestamp = datetime.datetime.now().isoformat()
+    try:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO logs (timestamp, source, message) VALUES (?, ?, ?)",
+                       (timestamp, source, message))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Erreur lors de l'écriture du log dans la DB: {e}")
 
 def main():
     # Créer un socket brut pour capturer les paquets réseau
@@ -10,45 +27,37 @@ def main():
         # Capturer les paquets
         raw_data, addr = conn.recvfrom(65536)
         dest_mac, src_mac, eth_proto, data = ethernet_frame(raw_data)
-        print('\nEthernet Frame:')
-        print(f'\tDestination: {dest_mac}, Source: {src_mac}, Protocol: {eth_proto}')
+        message = f"Ethernet Frame: Destination: {dest_mac}, Source: {src_mac}, Protocol: {eth_proto}"
+        print(message)
+        log_to_db("Surveillance du Réseau", message)
 
         # 8 pour IPv4
         if eth_proto == 8:
             (version, header_length, ttl, proto, src, target, data) = ipv4_packet(data)
-            print(f'\tIPv4 Packet:')
-            print(f'\t\tVersion: {version}, Header Length: {header_length}, TTL: {ttl}')
-            print(f'\t\tProtocol: {proto}, Source: {src}, Target: {target}')
+            message = f"IPv4 Packet: Version: {version}, Header Length: {header_length}, TTL: {ttl}, Protocol: {proto}, Source: {src}, Target: {target}"
+            print(message)
+            log_to_db("Surveillance du Réseau", message)
 
             # ICMP
             if proto == 1:
                 icmp_type, code, checksum, data = icmp_packet(data)
-                print(f'\t\tICMP Packet:')
-                print(f'\t\t\tType: {icmp_type}, Code: {code}, Checksum: {checksum}')
-                print(f'\t\t\tData:')
-                print(format_multi_line('\t\t\t\t', data))
+                message = f"ICMP Packet: Type: {icmp_type}, Code: {code}, Checksum: {checksum}"
+                print(message)
+                log_to_db("Surveillance du Réseau", message)
 
             # TCP
             elif proto == 6:
                 (src_port, dest_port, sequence, acknowledgment, flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin, data) = tcp_segment(data)
-                print(f'\t\tTCP Segment:')
-                print(f'\t\t\tSource Port: {src_port}, Destination Port: {dest_port}')
-                print(f'\t\t\tSequence: {sequence}, Acknowledgment: {acknowledgment}')
-                print(f'\t\t\tFlags:')
-                print(f'\t\t\t\tURG: {flag_urg}, ACK: {flag_ack}, PSH: {flag_psh}')
-                print(f'\t\t\t\tRST: {flag_rst}, SYN: {flag_syn}, FIN: {flag_fin}')
-                print(f'\t\t\tData:')
-                print(format_multi_line('\t\t\t\t', data))
+                message = f"TCP Segment: Source Port: {src_port}, Destination Port: {dest_port}, Sequence: {sequence}, Acknowledgment: {acknowledgment}, Flags: URG: {flag_urg}, ACK: {flag_ack}, PSH: {flag_psh}, RST: {flag_rst}, SYN: {flag_syn}, FIN: {flag_fin}"
+                print(message)
+                log_to_db("Surveillance du Réseau", message)
 
             # UDP
             elif proto == 17:
                 src_port, dest_port, length, data = udp_segment(data)
-                print(f'\t\tUDP Segment:')
-                print(f'\t\t\tSource Port: {src_port}, Destination Port: {dest_port}, Length: {length}')
-
-        else:
-            print(f'\tData:')
-            print(format_multi_line('\t\t', data))
+                message = f"UDP Segment: Source Port: {src_port}, Destination Port: {dest_port}, Length: {length}"
+                print(message)
+                log_to_db("Surveillance du Réseau", message)
 
 # Fonction pour désassembler la trame Ethernet
 def ethernet_frame(data):
@@ -93,15 +102,6 @@ def tcp_segment(data):
 def udp_segment(data):
     src_port, dest_port, size = struct.unpack('! H H 2x H', data[:8])
     return src_port, dest_port, size, data[8:]
-
-# Formater les lignes multi-lignes
-def format_multi_line(prefix, string, size=80):
-    size -= len(prefix)
-    if isinstance(string, bytes):
-        string = ''.join(r'\x{:02x}'.format(byte) for byte in string)
-        if size % 2:
-            size -= 1
-    return '\n'.join([prefix + line for line in textwrap.wrap(string, size)])
 
 if __name__ == "__main__":
     main()
