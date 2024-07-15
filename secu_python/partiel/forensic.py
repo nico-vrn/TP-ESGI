@@ -16,7 +16,8 @@ def analyser_journaux(fichier_journal):
     patterns = {
         "Injection SQL": re.compile(r"(SELECT|UNION|INSERT|UPDATE|DELETE|DROP|ALTER|CREATE)\s", re.IGNORECASE),
         "XSS": re.compile(r"<script.*?>.*?</script>", re.IGNORECASE),
-        "Inclusion de fichiers": re.compile(r"(\.\./|\.\./|%2e%2e|%252e%252e)", re.IGNORECASE)
+        "Inclusion de fichiers": re.compile(r"(\.\./|\.\./|%2e%2e|%252e%252e)", re.IGNORECASE),
+        "Command Injection": re.compile(r"(;|\||&&|\$\(.*\))", re.IGNORECASE)
     }
 
     # Ouvrir le fichier journal
