@@ -1,0 +1,4 @@
+2024-07-15T15:19:27.203034+0200 INFO Connexion suspecte détectée: sconn(fd=3, family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, laddr=addr(ip='0.0.0.0', port=3389), raddr=(), status='LISTEN', pid=28639)
+2024-07-15T15:19:32.215426+0200 INFO Connexion suspecte détectée: sconn(fd=3, family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, laddr=addr(ip='0.0.0.0', port=3389), raddr=(), status='LISTEN', pid=28639)
+2024-07-15T15:19:37.227352+0200 INFO Connexion suspecte détectée: sconn(fd=3, family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, laddr=addr(ip='0.0.0.0', port=3389), raddr=(), status='LISTEN', pid=28639)
+2024-07-15T15:19:42.249033+0200 INFO Connexion suspecte détectée: sconn(fd=3, family=<AddressFamily.AF_INET: 2>, type=<SocketKind.SOCK_STREAM: 1>, laddr=addr(ip='0.0.0.0', port=3389), raddr=(), status='LISTEN', pid=28639)
