@@ -1,0 +1,13 @@
+2024-07-18 12:57:50,554 - Starting proxy on port 8080
+2024-07-18 12:58:04,291 - GET request for ttp://example.com/ from ('127.0.0.1', 44228)
+2024-07-18 12:58:04,298 - Error forwarding request: No connection adapters were found for 'ttp://example.com/'
+2024-07-18 12:58:24,434 - GET request for ttp://blocked.com/ from ('127.0.0.1', 44230)
+2024-07-18 12:58:24,434 - Blocked request to ttp://blocked.com/
+2024-07-18 12:58:24,435 - ALERT: Blocked request to ttp://blocked.com/ from ('127.0.0.1', 44230)
+2024-07-18 12:58:45,101 - GET request for ttp://google.com/ from ('127.0.0.1', 44232)
+2024-07-18 12:58:45,102 - Error forwarding request: No connection adapters were found for 'ttp://google.com/'
+2024-07-18 13:00:19,399 - GET request for ttp://google.com/ from ('127.0.0.1', 44234)
+2024-07-18 13:00:19,415 - Error forwarding request: No connection adapters were found for 'ttp://google.com/'
+2024-07-18 13:00:25,438 - GET request for ttp://blocked.com/ from ('127.0.0.1', 44236)
+2024-07-18 13:00:25,439 - Blocked request to ttp://blocked.com/
+2024-07-18 13:00:25,440 - ALERT: Blocked request to ttp://blocked.com/ from ('127.0.0.1', 44236)
